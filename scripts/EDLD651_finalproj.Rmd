@@ -1,0 +1,19 @@
+---
+title: "EDLD651 Final Project"
+author: "Dillon, Eliott, Simone"
+date: "11/18/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(tidyverse)
+library(rio)
+library(here)
+
+
+```
+
+
