@@ -12,6 +12,34 @@ library(dplyr)
 library(tidyverse)
 library(rio)
 library(here)
+library(janitor)
+
+pew <- haven::read_sav(here("data", "Pew Research Center Global Attitudes Summer 2020 Dataset - Public.sav")) %>% clean_names() %>% as_tibble()
+```
+
+
+```{r DillonChunkCleaning}
+DillonPew <- pew
+DillonPew$country <- characterize(DillonPew$country)
+
+
+CovidChangeTable <- DillonPew %>% group_by(country, covid_change) %>% summarize(n=n()) %>% mutate(freq=n/sum(n))
+
+ggplot(CovidChangeTable, aes(x = country, y = as.numeric(freq) ,fill=as.factor(covid_change))) +
+  geom_bar(stat="identity")+
+  coord_flip()
+
+CovidChangeMeansTable <- DillonPew %>% select(country, covid_change) %>% pivot_wider(names_from = country, values_from = covid_change, values_fn = mean) %>% pivot_longer(cols=everything())
+
+CovidLonger <- DillonPew %>% select(country, qs8, cregion_us) %>% filter(country=="United States" & !is.na(qs8)) %>% mutate(one = 1)
+CovidLonger$qs8 <- characterize(CovidLonger$qs8)
+CovidLonger$cregion_us <- characterize(CovidLonger$cregion_us) 
+CovidLonger <- CovidLonger %>% pivot_wider(id_cols = c("cregion_us","qs8","one"),
+                names_from = c("qs8","cregion_us"),
+                values_from = "one",
+                values_fn = list("one" = length))
+CovidLonger <- CovidLonger %>% pivot_longer(cols=everything())
+
 
 
 ```
