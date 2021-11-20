@@ -13,6 +13,7 @@ library(tidyverse)
 library(rio)
 library(here)
 library(janitor)
+library(RColorBrewer)
 
 pew <- haven::read_sav(here("data", "Pew Research Center Global Attitudes Summer 2020 Dataset - Public.sav")) %>% clean_names() %>% as_tibble()
 ```
@@ -43,5 +44,56 @@ CovidLonger <- CovidLonger %>% pivot_longer(cols=everything())
 
 
 ```
+
+```{r EliottChunkCleaning}
+#new df +  showing categories of interest as text
+el_pew <- pew
+el_pew$country <- characterize(el_pew$country)
+el_pew$covid_ownfaith <- characterize(el_pew$covid_ownfaith)
+el_pew$trust_people <- characterize(el_pew$trust_people)
+el_pew$covid_change <- characterize(el_pew$covid_change)
+
+#View(el_pew)
+
+#displaying variables of interest in a table
+faith_table <- el_pew %>% 
+  select(covid_ownfaith, trust_people, covid_change) %>% 
+  group_by(trust_people, covid_ownfaith) %>% 
+  filter(trust_people == "In general, most people can be trusted" | trust_people == "In general, most people cannot be trusted",
+         covid_ownfaith == "Has not changed much" | covid_ownfaith == "Stronger" | covid_ownfaith == "Weaker") %>% 
+  summarize(n=n()) %>% 
+  mutate(percent = (n/sum(n))*100)
+faith_table
+
+#figure
+el_pew %>% 
+  filter(trust_people %in% c("In general, most people can be trusted", "In general, most people cannot be trusted")) %>%
+  filter(trust_people == "In general, most people can be trusted" | trust_people == "In general, most people cannot be trusted",
+         covid_ownfaith == "Has not changed much" | covid_ownfaith == "Stronger" | covid_ownfaith == "Weaker",
+         covid_change == "A fair amount" | covid_change == "A great deal" | covid_change == "Not at all" | covid_change == "Not too much") %>% 
+  ggplot() +
+  (aes(x = covid_ownfaith, fill=as.factor(covid_change))) +
+  geom_bar() +
+  facet_wrap(~trust_people) +
+  theme_bw() +
+  scale_fill_brewer(palette="RdGy") +
+  labs(title = "Faith Change during COVID-19 Pandemic",
+       subtitle = "by trust in people and amount of life change during the pandemic",
+       x = "Faith Change",
+       y = "Frequency") +
+  coord_flip()
+
+#displaying faith change with trust in people
+faith_table_wider <- el_pew %>% 
+  select(covid_ownfaith, covid_change, trust_people) %>% 
+  filter(trust_people == "In general, most people can be trusted" | trust_people == "In general, most people cannot be trusted",
+         covid_ownfaith == "Has not changed much" | covid_ownfaith == "Stronger" | covid_ownfaith == "Weaker") %>% 
+  pivot_wider(names_from = covid_ownfaith, values_from = covid_change)
+faith_table_wider
+
+#I haven't used pivot_longer...not sure what to do with that here
+```
+
+
 
 
