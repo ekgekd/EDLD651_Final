@@ -54,6 +54,7 @@ el_pew$covid_ownfaith <- characterize(el_pew$covid_ownfaith)
 el_pew$trust_people <- characterize(el_pew$trust_people)
 el_pew$covid_change <- characterize(el_pew$covid_change)
 
+#View(pew)
 #View(el_pew)
 
 #displaying variables of interest in a table
@@ -77,11 +78,12 @@ el_pew %>%
   geom_bar() +
   facet_wrap(~trust_people) +
   theme_bw() +
-  scale_fill_brewer(palette="RdGy") +
+  scale_fill_brewer(palette="spectral") +
   labs(title = "Faith Change during COVID-19 Pandemic",
        subtitle = "by trust in people and amount of life change during the pandemic",
        x = "Faith Change",
-       y = "Frequency") +
+       y = "Frequency",
+       fill = "COVID Life Change") +
   coord_flip()
 
 #displaying faith change with trust in people
