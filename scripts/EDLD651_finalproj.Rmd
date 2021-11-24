@@ -44,7 +44,6 @@ CovidLonger <- CovidLonger %>% pivot_wider(id_cols = c("cregion_us","qs8","one")
 CovidLonger <- CovidLonger %>% pivot_longer(cols=everything())
 
 
-
 ```
 
 ```{r EliottChunkCleaning}
