@@ -22,7 +22,7 @@ pew <- haven::read_sav(here("data", "Pew Research Center Global Attitudes Summer
 ```{r DillonChunkCleaning}
 DillonPew <- pew
 DillonPew$country <- characterize(DillonPew$country)
-
+DillonPew <- DillonPew %>% filter(covid_change<5)
 
 CovidChangeTable <- DillonPew %>% group_by(country, covid_change) %>% summarize(n=n()) %>% mutate(freq=n/sum(n))
 
@@ -31,6 +31,10 @@ ggplot(CovidChangeTable, aes(x = country, y = as.numeric(freq) ,fill=as.factor(c
   coord_flip()
 
 CovidChangeMeansTable <- DillonPew %>% select(country, covid_change) %>% pivot_wider(names_from = country, values_from = covid_change, values_fn = mean) %>% pivot_longer(cols=everything())
+
+ggplot(DillonPew, aes(x = country, y = as.numeric(covid_change) ,fill=as.factor(country))) +
+  geom_boxplot()+
+  coord_flip()
 
 CovidLonger <- DillonPew %>% select(country, qs8, cregion_us) %>% filter(country=="United States" & !is.na(qs8)) %>% mutate(one = 1)
 CovidLonger$qs8 <- characterize(CovidLonger$qs8)
