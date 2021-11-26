@@ -3,6 +3,8 @@ title: "EDLD651 Final Project"
 author: "Dillon, Eliott, Simone"
 date: "11/18/2021"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -44,7 +46,6 @@ CovidLonger <- CovidLonger %>% pivot_wider(id_cols = c("cregion_us","qs8","one")
                 values_from = "one",
                 values_fn = list("one" = length))
 CovidLonger <- CovidLonger %>% pivot_longer(cols=everything())
-
 
 
 ```
@@ -99,5 +100,78 @@ faith_table_wider
 ```
 
 
+```{r SimoneChunkCleaning}
+
+# Maybe add some more descriptive tables of just baseline spread of beliefs about family closeness by country, or beliefs about division/unity
+
+
+#Setting up data and characterizing
+sm_pew <- pew %>%
+  mutate(covid_united = na_if(covid_united, 8),
+         covid_united = na_if(covid_united, 9),
+         covid_family = na_if(covid_family, 7),
+         covid_family = na_if(covid_family, 8),
+         covid_family = na_if(covid_family, 9))
+
+sm_pew$country <- characterize(sm_pew$country)
+sm_pew$sex <- characterize(sm_pew$sex)
+sm_pew$covid_united <- characterize(sm_pew$covid_united)
+sm_pew$covid_family <- characterize(sm_pew$covid_family)
+
+
+#Figure for global level of feelings of closeness to family due to COVID for those who feel country is more divided or united 
+
+sm_pew %>%
+   select(country, sex, covid_united, covid_family)%>%
+  drop_na(covid_united, covid_family) %>%
+  ggplot(aes(x = country, fill=as.factor(covid_family))) +
+  geom_bar() +
+  facet_wrap(~covid_united) +
+  theme_bw() +
+  scale_fill_brewer(palette="spectral") +
+  coord_flip() +
+   labs(title = "Global Beliefs about Changes in Family Closeness Due to Covid",
+        subtitle = "Differences According to Perceptions of National Unity",
+       x = "Country",
+       y = "Frequency", 
+       fill = "Change in Family Closeness")
+
+
+#Figure for level of belief about unity/division and perceptions of family closeness for men and women in the US
+
+sm_pew %>%
+   select(country, sex, covid_united, covid_family) %>%
+  filter(country == "United States") %>%
+  drop_na(covid_united, covid_family) %>%
+  ggplot(aes(x = sex, fill=as.factor(covid_family))) +
+  geom_bar(postion = "dodge") +
+  facet_wrap(~covid_united) +
+  theme_bw() +
+  scale_fill_brewer(palette="spectral") +
+   labs(title = "Beliefs about Changes to Family Closeness due to COVID in the US",
+        subtitle = "Differences According to Perceptions of National Unity and Sex",
+       x = "Sex",
+       y = "Frequency", 
+       fill = "Change in Family Closeness")
+
+#Comparing USA and S Korea perceptions of Unity/division and family closeness due to covid (i.e. individualistic vs. more collectivistic)
+
+sm_pew %>%
+   select(country, covid_united, covid_family) %>%
+  filter(country == "South Korea" | country == "United States") %>%
+  drop_na(covid_united, covid_family) %>%
+  ggplot(aes(x = country, fill=as.factor(covid_family))) +
+  geom_bar() +
+  facet_wrap(~covid_united) +
+  theme_bw() +
+  scale_fill_brewer(palette="spectral") +
+   labs(title = "Beliefs about Changes to Family Closeness due to COVID in the USA vs. South Korea",
+        subtitle = "Differences According to Perceptions of National Unity",
+       x = "Sex",
+       y = "Frequency", 
+       fill = "Change in Family Closeness")
+
+
+```
 
 
