@@ -44,7 +44,12 @@ ggplot(CovidChangeTable, aes(x = country, y = freq, fill= covid_change))+
        fill = "Responses") 
   
 
-CovidChangeMeansTable <- DillonPew %>% select(country, covid_change) %>% pivot_wider(names_from = country, values_from = covid_change, values_fn = mean) %>% pivot_longer(cols=everything()) #value is NA perhaps because covid_change is categorical variable not numeric
+CovidChangeMeansTable <- DillonPew %>% 
+  select(country, covid_change) %>% 
+  pivot_wider(names_from = country, 
+              values_from = covid_change, 
+              values_fn = mean) %>% 
+  pivot_longer(cols=everything()) #value is NA perhaps because covid_change is categorical variable not numeric
 
 CovidLonger <- DillonPew %>% 
   select(country, qs8, cregion_us) %>% 
@@ -75,10 +80,13 @@ el_pew <- pew # characterized() has applied in the beginning
 faith_table <- el_pew %>% 
   select(covid_ownfaith, trust_people, covid_change) %>% 
   group_by(trust_people, covid_ownfaith) %>% 
-  filter(trust_people == "In general, most people can be trusted" | trust_people == "In general, most people cannot be trusted",
-         covid_ownfaith == "Has not changed much" | covid_ownfaith == "Stronger" | covid_ownfaith == "Weaker") %>% 
+  filter(trust_people == "In general, most people can be trusted" |
+           trust_people == "In general, most people cannot be trusted",
+         covid_ownfaith == "Has not changed much" |
+           covid_ownfaith == "Stronger" |
+           covid_ownfaith == "Weaker") %>% 
   summarize(n=n()) %>% 
-  mutate(percent = (n / sum(n))*100)
+  mutate(percent = (n/sum(n))*100)
 faith_table
 
 #figure
