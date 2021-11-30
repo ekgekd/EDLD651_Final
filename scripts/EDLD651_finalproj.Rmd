@@ -16,27 +16,51 @@ library(rio)
 library(here)
 library(janitor)
 library(RColorBrewer)
+library(haven) #adding haven here for consistency so that people know all packages used in this project
+```
 
-pew <- haven::read_sav(here("data", "Pew Research Center Global Attitudes Summer 2020 Dataset - Public.sav")) %>% clean_names() %>% as_tibble()
+<!-- Create new chunk for data loading  -->
+
+```{r load-data} 
+pew <- read_sav(here("data", "Pew Research Center Global Attitudes Summer 2020 Dataset - Public.sav")) %>% 
+  clean_names() %>% #new line after each %>% for readability
+  as_tibble() %>% 
+  characterize() #moving the characterize function up here
 ```
 
 
 ```{r DillonChunkCleaning}
 DillonPew <- pew
-DillonPew$country <- characterize(DillonPew$country)
 
+CovidChangeTable <- DillonPew %>% 
+  group_by(country, covid_change) %>% 
+  summarize(n=n()) %>% 
+  mutate(freq=n/sum(n))
 
-CovidChangeTable <- DillonPew %>% group_by(country, covid_change) %>% summarize(n=n()) %>% mutate(freq=n/sum(n))
-
-ggplot(CovidChangeTable, aes(x = country, y = as.numeric(freq) ,fill=as.factor(covid_change))) +
+ggplot(CovidChangeTable, aes(x = country, y = freq, fill= covid_change))+
   geom_bar(stat="identity")+
-  coord_flip()
+  coord_flip() +
+  labs(title = "As a result of the Covid19 outbreak, has your own life changed?", #adding the question as title
+       fill = "Responses") 
+  
 
-CovidChangeMeansTable <- DillonPew %>% select(country, covid_change) %>% pivot_wider(names_from = country, values_from = covid_change, values_fn = mean) %>% pivot_longer(cols=everything())
+CovidChangeMeansTable <- DillonPew %>% 
+  select(country, covid_change) %>% 
+  pivot_wider(names_from = country, 
+              values_from = covid_change, 
+              values_fn = mean) %>% 
+  pivot_longer(cols=everything()) #value is NA perhaps because covid_change is categorical variable not numeric
 
-CovidLonger <- DillonPew %>% select(country, qs8, cregion_us) %>% filter(country=="United States" & !is.na(qs8)) %>% mutate(one = 1)
-CovidLonger$qs8 <- characterize(CovidLonger$qs8)
-CovidLonger$cregion_us <- characterize(CovidLonger$cregion_us) 
+CovidLonger <- DillonPew %>% 
+  select(country, qs8, cregion_us) %>% 
+  filter(country=="United States") %>% 
+  mutate(one = 1) #not sure why it is mutated. 
+#& !is.na(qs8)) %>%  #
+ # 
+
+
+#CovidLonger$qs8 <- characterize(CovidLonger$qs8) #Done with characterize() on data-load chunk
+#CovidLonger$cregion_us <- characterize(CovidLonger$cregion_us) 
 CovidLonger <- CovidLonger %>% pivot_wider(id_cols = c("cregion_us","qs8","one"),
                 names_from = c("qs8","cregion_us"),
                 values_from = "one",
@@ -48,11 +72,7 @@ CovidLonger <- CovidLonger %>% pivot_longer(cols=everything())
 
 ```{r EliottChunkCleaning}
 #new df +  showing categories of interest as text
-el_pew <- pew
-el_pew$country <- characterize(el_pew$country)
-el_pew$covid_ownfaith <- characterize(el_pew$covid_ownfaith)
-el_pew$trust_people <- characterize(el_pew$trust_people)
-el_pew$covid_change <- characterize(el_pew$covid_change)
+el_pew <- pew # characterized() has applied in the beginning
 
 #View(el_pew)
 
@@ -60,8 +80,11 @@ el_pew$covid_change <- characterize(el_pew$covid_change)
 faith_table <- el_pew %>% 
   select(covid_ownfaith, trust_people, covid_change) %>% 
   group_by(trust_people, covid_ownfaith) %>% 
-  filter(trust_people == "In general, most people can be trusted" | trust_people == "In general, most people cannot be trusted",
-         covid_ownfaith == "Has not changed much" | covid_ownfaith == "Stronger" | covid_ownfaith == "Weaker") %>% 
+  filter(trust_people == "In general, most people can be trusted" |
+           trust_people == "In general, most people cannot be trusted",
+         covid_ownfaith == "Has not changed much" |
+           covid_ownfaith == "Stronger" |
+           covid_ownfaith == "Weaker") %>% 
   summarize(n=n()) %>% 
   mutate(percent = (n/sum(n))*100)
 faith_table
@@ -81,7 +104,8 @@ el_pew %>%
   labs(title = "Faith Change during COVID-19 Pandemic",
        subtitle = "by trust in people and amount of life change during the pandemic",
        x = "Faith Change",
-       y = "Frequency") +
+       y = "Frequency",
+       fill = "Responses") + #Adding labels: title, subtitle 
   coord_flip()
 
 #displaying faith change with trust in people
@@ -90,7 +114,7 @@ faith_table_wider <- el_pew %>%
   filter(trust_people == "In general, most people can be trusted" | trust_people == "In general, most people cannot be trusted",
          covid_ownfaith == "Has not changed much" | covid_ownfaith == "Stronger" | covid_ownfaith == "Weaker") %>% 
   pivot_wider(names_from = covid_ownfaith, values_from = covid_change)
-faith_table_wider
+faith_table_wider #it seems like the wider table  contains list as value. 
 
 #I haven't used pivot_longer...not sure what to do with that here
 ```
