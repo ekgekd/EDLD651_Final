@@ -47,6 +47,14 @@ CovidLonger <- CovidLonger %>% pivot_longer(cols=everything())
 
 ```
 
+# The COVID change table is very visually appealing with the colors! May want to change the labels of the y-axis and legend to something more meaningful.
+
+# Great job using new skills (pivot wider) in a way that is useful.
+
+# It may be beneficial to be consistent with spacing between words when coding.
+
+# I learned that piping without pressing enter still works.
+
 ```{r EliottChunkCleaning}
 #new df +  showing categories of interest as text
 el_pew <- pew
@@ -96,6 +104,9 @@ faith_table_wider
 #I haven't used pivot_longer...not sure what to do with that here
 ```
 
+# Great data hygiene labeling each separate task, it is very clear and would be easy to reproduce!
+
+# An area of improvement is to use pivot longer. Perhaps you could use it for the table of variables of interest?
 
 ```{r SimoneChunkCleaning}
 
@@ -218,4 +229,6 @@ sm_pew %>%
 
 ```
 
+# Really interesting research questions and figure showing USA and South Korea perceptions of unity and division and family closeness due to COVID-19! What an interesting and thoughtful topic!
 
+# Really nice graphs! I learned that you can make graphs very visually appealing, particularly with the background of the headings. Great job!
