@@ -6,7 +6,7 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
-
+### CMalcom Comment: This R markdown document ran perfectly for me and knitted with no issues. You might consider adding more options to the YAML, like theme, and to the knitr setup - we learned lots of cool features in class that will help with formatting your final paper.
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
@@ -21,7 +21,7 @@ library(gtsummary)
 pew <- haven::read_sav(here("data", "Pew Research Center Global Attitudes Summer 2020 Dataset - Public.sav")) %>% clean_names() %>% as_tibble()
 ```
 
-
+### CMalcom Comment: Edited graph lines of code by inserting formatting for title, labels, and key (lines 34:37 in chunk "DillonChunkCleaning" below.)
 ```{r DillonChunkCleaning}
 DillonPew <- pew
 DillonPew$country <- characterize(DillonPew$country)
@@ -31,7 +31,11 @@ CovidChangeTable <- DillonPew %>% group_by(country, covid_change) %>% summarize(
 
 ggplot(CovidChangeTable, aes(x = country, y = as.numeric(freq) ,fill=as.factor(covid_change))) +
   geom_bar(stat="identity")+
-  coord_flip()
+  coord_flip() +
+  labs(x ="Country",
+  y = "Frequency",
+  title = "Figure1",
+  fill = "Covid Change")
 
 CovidChangeMeansTable <- DillonPew %>% select(country, covid_change) %>% pivot_wider(names_from = country, values_from = covid_change, values_fn = mean) %>% pivot_longer(cols=everything())
 
@@ -47,6 +51,7 @@ CovidLonger <- CovidLonger %>% pivot_longer(cols=everything())
 
 ```
 
+### CMalcom Comment: There is a lot in this one chunk. Separating this chunk and others into small "step" chunks may make understanding what each section of code does easier for reviewers (but totally get this is my visual preference so do what works best for your team).
 ```{r EliottChunkCleaning}
 #new df +  showing categories of interest as text
 el_pew <- pew
@@ -66,6 +71,8 @@ faith_table <- el_pew %>%
   summarize(n=n()) %>% 
   mutate(percent = (n/sum(n))*100)
 faith_table
+
+#CM Comment: For the below graph (with red color bars), recommend changing the key label to remove "as.factor" and clarify that the key indicates amount of change in faith during COVID. Might try modifying the facet headings too so that they are completely visible - this is an article I found on google that helped me modify my facets: https://www.datanovia.com/en/blog/how-to-change-ggplot-facet-labels/.
 
 #figure
 el_pew %>% 
@@ -96,7 +103,7 @@ faith_table_wider
 #I haven't used pivot_longer...not sure what to do with that here
 ```
 
-
+### CMalcom Comment: I agree whole heartedly with the first comment below about adding some descriptive tables. The describeBy function could be useful here to give your audience an overview of what your data looks like.
 ```{r SimoneChunkCleaning}
 
 characterize(pew)
