@@ -279,5 +279,24 @@ Participants
 These data were collected by Pew Research Center, as part of their “Global Attitudes & Trends” Summer 2020 Questionnaire. Their recruitment procedure varied by country but generally employed a list-assisted Random Digit Dial (RDD) or both landlines and cell phones, stratified by region. Approximately 1000 responses per country were collected. A table of demographic data can be found in Table 1. Participants were age 18 or older, and were not compensated for their data.
 
 Instrument
-This questionnaire included 40 items. The number of items read to a respondent depended based on their country and response to prior questions.
+This questionnaire included 40 items. The number of items read to a respondent depended based on their country and response to prior questions. 
+The items addressed in these report are: 
+- As a result of the coronavirus1 outbreak, has your own life changed a great deal, a fair amount, not too much, or not at all?
+- Now thinking about our economic situation, how would you describe the current economic situation in (survey country) – is it very good, somewhat good, somewhat bad or very bad?
+- In general, would you describe your political views as ... ? Very conservative, conservative, moderate, liberal, very liberal
+- As a result of the coronavirus outbreak, has your own faith become stronger, weaker, or not changed much?
+- Which of the following statements comes to closer to your view? In general, most people can be trusted, OR In general, most people cannot be trusted
+- As a result of the coronavirus outbreak, has your relationship with immediate family members become stronger, weaker, or not changed much?
+- Thinking about [SURVEY COUNTRY] as a whole, do you think this country is now more UNITED or more DIVIDED than before the coronavirus outbreak?
+
+Results:
+
+
+
+
+
+
+
+
+
 
