@@ -16,6 +16,7 @@ library(rio)
 library(here)
 library(janitor)
 library(RColorBrewer)
+library(gtsummary)
 
 pew <- haven::read_sav(here("data", "Pew Research Center Global Attitudes Summer 2020 Dataset - Public.sav")) %>% clean_names() %>% as_tibble()
 ```
@@ -102,8 +103,7 @@ faith_table_wider
 
 ```{r SimoneChunkCleaning}
 
-# Maybe add some more descriptive tables of just baseline spread of beliefs about family closeness by country, or beliefs about division/unity
-
+characterize(pew)
 
 #Setting up data and characterizing
 sm_pew <- pew %>%
@@ -116,7 +116,51 @@ sm_pew <- pew %>%
 sm_pew$country <- characterize(sm_pew$country)
 sm_pew$sex <- characterize(sm_pew$sex)
 sm_pew$covid_united <- characterize(sm_pew$covid_united)
-sm_pew$covid_family <- characterize(sm_pew$covid_family)
+sm_pew$covid_family <- characterize(sm_pew$covid_family) 
+
+#Summary table of national unity percentages
+
+sm_pew %>%
+  select(country, covid_united) %>%
+  tbl_summary(
+    by = covid_united) 
+
+#summary table of family closeness percentages
+
+sm_pew %>%
+  select(country, covid_family) %>%
+  tbl_summary(
+    by = covid_family)
+
+# Figure for descriptive of changes in family closeness per country
+
+sm_pew %>%
+  select(country, covid_family)%>%
+  drop_na(covid_family) %>%
+  ggplot(aes(x = fct_infreq(country), fill=as.factor(covid_family))) +
+  geom_bar() +
+  theme_bw() +
+  scale_fill_brewer(palette="spectral") +
+  coord_flip() +
+   labs(title = "Global Beliefs about Changes in Family Closeness Due to Covid",
+       x = "Country",
+       y = "Frequency", 
+       fill = "Change in Family Closeness")
+
+# Figure for descriptive of changes in perceptions of unity/division per country
+
+sm_pew %>%
+   select(country, covid_united)%>%
+  drop_na(covid_united) %>%
+  ggplot(aes(x = fct_infreq(country), fill=as.factor(covid_united))) +
+  geom_bar() +
+  theme_bw() +
+  scale_fill_brewer(palette="spectral") +
+  coord_flip() +
+   labs(title = "Global Beliefs about Perceptions of National Unity or Division Due to Covid",
+       x = "Country",
+       y = "Frequency", 
+       fill = "National Unity")
 
 
 #Figure for global level of feelings of closeness to family due to COVID for those who feel country is more divided or united 
@@ -124,7 +168,7 @@ sm_pew$covid_family <- characterize(sm_pew$covid_family)
 sm_pew %>%
    select(country, sex, covid_united, covid_family)%>%
   drop_na(covid_united, covid_family) %>%
-  ggplot(aes(x = country, fill=as.factor(covid_family))) +
+  ggplot(aes(x = fct_reorder(country, covid_family), fill=as.factor(covid_family))) +
   geom_bar() +
   facet_wrap(~covid_united) +
   theme_bw() +
@@ -134,7 +178,9 @@ sm_pew %>%
         subtitle = "Differences According to Perceptions of National Unity",
        x = "Country",
        y = "Frequency", 
-       fill = "Change in Family Closeness")
+       fill = "Change in Family Closeness") +
+  theme(strip.text.x = element_text(size = 15, colour = "lightskyblue4")) +
+  theme(strip.background =element_rect(fill="white"))
 
 
 #Figure for level of belief about unity/division and perceptions of family closeness for men and women in the US
@@ -167,9 +213,11 @@ sm_pew %>%
   scale_fill_brewer(palette="spectral") +
    labs(title = "Beliefs about Changes to Family Closeness due to COVID in the USA vs. South Korea",
         subtitle = "Differences According to Perceptions of National Unity",
-       x = "Sex",
+       x = "Country",
        y = "Frequency", 
-       fill = "Change in Family Closeness")
+       fill = "Change in Family Closeness") +
+  theme(strip.text.x = element_text(size = 15, colour = "lightskyblue4")) +
+  theme(strip.background =element_rect(fill="white"))
 
 
 ```
