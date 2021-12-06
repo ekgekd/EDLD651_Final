@@ -17,6 +17,10 @@ library(here)
 library(janitor)
 library(RColorBrewer)
 library(gtsummary)
+library(psych)
+library(naniar)
+library(corrplot)
+library(nnet)
 library(kableExtra)
 library(gt)
 
@@ -27,15 +31,26 @@ pew <- haven::read_sav(here("data", "Pew Research Center Global Attitudes Summer
 ```{r DillonChunkCleaning}
 DillonPew <- pew
 DillonPew$country <- characterize(DillonPew$country)
+DillonPew <- DillonPew %>% filter(covid_change<5)
+DillonPew <- DillonPew %>% replace_with_na_all(~.x>4)
+```
 
 
+```{r DillonAnalysis}
 CovidChangeTable <- DillonPew %>% group_by(country, covid_change) %>% summarize(n=n()) %>% mutate(freq=n/sum(n))
 
 ggplot(CovidChangeTable, aes(x = country, y = as.numeric(freq) ,fill=as.factor(covid_change))) +
   geom_bar(stat="identity")+
-  coord_flip()
+  coord_flip()+
+  labs(title = "'How Has Covid Changed Your Life?' by Country",
+       y= "Frequency", fill="Responses")+
+  scale_fill_discrete(name = "Response", labels = c("A great deal", "A fair amount", "Not too much","Not at all"))
 
 CovidChangeMeansTable <- DillonPew %>% select(country, covid_change) %>% pivot_wider(names_from = country, values_from = covid_change, values_fn = mean) %>% pivot_longer(cols=everything())
+
+ggplot(DillonPew, aes(x = country, y = as.numeric(covid_change) ,fill=as.factor(country))) +
+  geom_boxplot()+
+  coord_flip()
 
 CovidLonger <- DillonPew %>% select(country, qs8, cregion_us) %>% filter(country=="United States" & !is.na(qs8)) %>% mutate(one = 1)
 CovidLonger$qs8 <- characterize(CovidLonger$qs8)
@@ -46,8 +61,33 @@ CovidLonger <- CovidLonger %>% pivot_wider(id_cols = c("cregion_us","qs8","one")
                 values_fn = list("one" = length))
 CovidLonger <- CovidLonger %>% pivot_longer(cols=everything())
 
-
+DillonCorMatrix <- cor(select(DillonPew, covid_change:covid_who) %>% select(-fav_nato, -covid_us))
+parallel <- DillonCorMatrix %>% fa.parallel(., fm = 'minres', fa = 'fa', n.obs=14261)
+fa.none <- fa(r=DillonCorMatrix, 
+ nfactors = 7,
+ n.obs=14261,
+ # covar = FALSE, SMC = TRUE,
+ fm="pa", # type of factor analysis we want to use (“pa” is principal axis factoring)
+ max.iter=100, # (50 is the default, but we have changed it to 100
+ rotate="varimax") # none rotation
+print(fa.none)
+KMO(r=DillonCorMatrix)
+cor(select(DillonPew, covid_change:covid_who))
+corrplot(DillonCorMatrix)
 ```
+
+```{r}
+logModel1 <- multinom(d_political_scale_us~covid_change+econ_sit,
+                   data = filter(DillonPew, d_political_scale_us<5 & econ_sit<5), family = "binomial")
+summary(logModel1)
+coef(logModel1) %>% exp()
+
+z <- summary(logModel1)$coefficients/summary(logModel1)$standard.errors
+p <- (1 - pnorm(abs(z), 0, 1)) * 2
+p
+```
+
+
 
 ```{r EliottChunkCleaning}
 #new df +  showing categories of interest as text
@@ -228,4 +268,16 @@ sm_pew %>%
 
 ```
 
+Introduction:
+COVID-19 is an international health crisis that has been managed through various policies, including mask mandates, social distancing, remote work/schooling, etc., which have often disrupted people’s normal routines. The extent to which people have been affected by COVID-19 and subsequent interventions depends not only on the prevalence of infection, but also the substantive interventions to manage it. These, naturally, are related to each other, and subject to various factors, including country, population density, regionally empowered political party, and more. Because of the interplay of factors, there are numerous ways in which COVID-19 could affect perceptions of daily living, relationships (ranging from the level of interpersonal to international), religious beliefs, and so on. Thus, our research questions relate to perceived changes as a result of COVID-19. They are, 
+1.	How does the COVID-19 Pandemic relate to perceptions of changes in daily life?;
+2.	How has COVID-19 influenced beliefs about trust in others and religious beliefs?; and, 
+3.	How has COVID-19 influenced beliefs about family closeness and national unity? 
+
+Methods:
+Participants
+These data were collected by Pew Research Center, as part of their “Global Attitudes & Trends” Summer 2020 Questionnaire. Their recruitment procedure varied by country but generally employed a list-assisted Random Digit Dial (RDD) or both landlines and cell phones, stratified by region. Approximately 1000 responses per country were collected. A table of demographic data can be found in Table 1. Participants were age 18 or older, and were not compensated for their data.
+
+Instrument
+This questionnaire included 40 items. The number of items read to a respondent depended based on their country and response to prior questions.
 
