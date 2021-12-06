@@ -17,6 +17,8 @@ library(here)
 library(janitor)
 library(RColorBrewer)
 library(gtsummary)
+library(kableExtra)
+library(gt)
 
 pew <- haven::read_sav(here("data", "Pew Research Center Global Attitudes Summer 2020 Dataset - Public.sav")) %>% clean_names() %>% as_tibble()
 ```
@@ -65,8 +67,12 @@ faith_table <- el_pew %>%
   filter(trust_people == "In general, most people can be trusted" | trust_people == "In general, most people cannot be trusted",
          covid_ownfaith == "Has not changed much" | covid_ownfaith == "Stronger" | covid_ownfaith == "Weaker") %>% 
   summarize(n=n()) %>% 
-  mutate(percent = (n/sum(n))*100)
+  mutate(percent = (n/sum(n))*100) %>% 
+  kable(digits = 1) 
 faith_table
+
+#releveling covid_change
+el_pew$covid_change <- factor(el_pew$covid_change, levels = c("Not at all", "Not too much", "A fair amount", "A great deal"))
 
 #figure
 el_pew %>% 
@@ -74,12 +80,11 @@ el_pew %>%
   filter(trust_people == "In general, most people can be trusted" | trust_people == "In general, most people cannot be trusted",
          covid_ownfaith == "Has not changed much" | covid_ownfaith == "Stronger" | covid_ownfaith == "Weaker",
          covid_change == "A fair amount" | covid_change == "A great deal" | covid_change == "Not at all" | covid_change == "Not too much") %>% 
-  ggplot() +
-  (aes(x = covid_ownfaith, fill=as.factor(covid_change))) +
-  geom_bar() +
+  ggplot(aes(x = covid_ownfaith, fill=as.factor(covid_change))) +
+  geom_bar(position = position_dodge(preserve = 'single')) +
   facet_wrap(~trust_people) +
   theme_bw() +
-  scale_fill_brewer(palette="spectral") +
+  scale_fill_brewer(palette="BrBG") +
   labs(title = "Faith Change during COVID-19 Pandemic",
        subtitle = "by trust in people and amount of life change during the pandemic",
        x = "Faith Change",
@@ -92,10 +97,13 @@ faith_table_wider <- el_pew %>%
   select(covid_ownfaith, covid_change, trust_people) %>% 
   filter(trust_people == "In general, most people can be trusted" | trust_people == "In general, most people cannot be trusted",
          covid_ownfaith == "Has not changed much" | covid_ownfaith == "Stronger" | covid_ownfaith == "Weaker") %>% 
-  pivot_wider(names_from = covid_ownfaith, values_from = covid_change)
+  pivot_wider(names_from = covid_ownfaith, values_from = covid_change) %>% 
+#  gt() %>% 
+#  tab_header(
+#    title = "Trust and Change in Faith during COVID")
 faith_table_wider
 
-#I haven't used pivot_longer...not sure what to do with that here
+
 ```
 
 
