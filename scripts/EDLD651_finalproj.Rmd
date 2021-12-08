@@ -338,22 +338,7 @@ sm_pew <- pew %>%
 
 
 ```{r SimoneRegressions}
-as.factor(sm_pew$covid_united)
 
-
-sm_pewlog<- sm_pew %>%
- select(covid_united, covid_family, country) %>%
-  zap_labels()
-
-
-
-      mutate(covid_family = dplyr::recode(factor(covid_family,
-                '2' = 1, 
-                '3' = 2,
-                '1' = 3)),
-               covid_united = dplyr::recode(factor(covid_united,
-                                      '1' = 2,
-                                      '2' = 1)))
 sm_pewlog<- sm_pew %>%
  select(covid_united, covid_family, country) %>%
   zap_labels() %>%
