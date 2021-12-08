@@ -158,17 +158,11 @@ $82.3\%$ & $12.7\%$ & $5.0\%$ \\
  \bottomrule
 \end{longtable}
 
-In both trust groups, respondents were most likely to say that their life had changed not too much or a fair amount as a result of COVID, rather than either extreme answer of \enquote{not at all} or \enquote{a great deal.} However, answers tended more toward the extreme of \enquote{a great deal} in the cannot-trust group than in the can-trust group.
-
 \begin{figure}
 \centering
 \includegraphics{EDLD651_finalproj_files/figure-latex/EliottFigure-1.pdf}
 \caption{\label{fig:EliottFigure}Figure 1: Trust in People and Changes in Faith due to COVID}
 \end{figure}
-
-\begin{verbatim}
-## Warning: Removed 1147 rows containing non-finite values (stat_smooth).
-\end{verbatim}
 
 \begin{figure}
 \centering
@@ -176,33 +170,28 @@ In both trust groups, respondents were most likely to say that their life had ch
 \caption{\label{fig:SimoneRegressions}Regression Plot: Predicting Perceptions of National Unity by Change in Family Closeness during COVID}
 \end{figure}
 
-\begin{tabular}{l|l|l|l}
-\hline
-**Characteristic** & **OR** & **95\% CI** & **p-value**\\
-\hline
-\_\_covid\_family\_\_ & 1.32 & 1.24, 1.40 & \_\_<0.001\_\_\\
-\hline
-\_\_Country\_\_ & 0.93 & 0.92, 0.94 & \_\_<0.001\_\_\\
-\hline
-\end{tabular}
+\begin{figure}
+\centering
+\includegraphics{EDLD651_finalproj_files/figure-latex/unnamed-chunk-1-1.pdf}
+\caption{\label{fig:unnamed-chunk-1}Global Beliefs of Unity and Family Closeness}
+\end{figure}
 
 \begin{figure}
 \centering
 \includegraphics{EDLD651_finalproj_files/figure-latex/unnamed-chunk-2-1.pdf}
-\caption{\label{fig:unnamed-chunk-2}Global Beliefs of Unity and Family Closeness}
+\caption{\label{fig:unnamed-chunk-2}Global Beliefs of Unity and Family Closeness: USA VS. S. Korea}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics{EDLD651_finalproj_files/figure-latex/unnamed-chunk-3-1.pdf}
-\caption{\label{fig:unnamed-chunk-3}Global Beliefs of Unity and Family Closeness: USA VS. S. Korea}
+\caption{\label{fig:unnamed-chunk-3}Perceptions of Changes in Life due to COVID by Country}
 \end{figure}
 
-\begin{figure}
-\centering
-\includegraphics{EDLD651_finalproj_files/figure-latex/unnamed-chunk-4-1.pdf}
-\caption{\label{fig:unnamed-chunk-4}Perceptions of Changes in Life due to COVID by Country}
-\end{figure}
+\hypertarget{abstract}{%
+\subsection{Abstract}\label{abstract}}
+
+The Pew Research Center conducted an international survey on attitudes related to the COVID-19 pandemic in 2020 (N = 14 276). Responses on nationality, as well as perceptions on life change resulting from the pandemic, change in religious faith, change in family unity, national unity, and trust in others were analyzed. The majority of respondents perceived some but not much change in the variables of interest, although there were some differences by country, and responses to changes in particular facets of life showed some correspondence to overall perception of life change. Further, more participants reported stronger faith and family unity than weaker. These results potentially have implications on resilience and well-being.
 
 \hypertarget{introduction}{%
 \subsection{Introduction:}\label{introduction}}
@@ -251,12 +240,16 @@ An exploratory factor analysis was conducted to elucidate the factor structure o
 \hypertarget{covid-19-trust-in-others-and-religious-beliefs}{%
 \subsubsection{COVID-19, trust in others, and religious beliefs}\label{covid-19-trust-in-others-and-religious-beliefs}}
 
+In both trust groups, respondents were most likely to say that their life had changed not too much or a fair amount as a result of COVID, rather than either extreme answer of \enquote{not at all} or \enquote{a great deal.} However, answers tended more toward the extreme of \enquote{a great deal} in the cannot-trust group than in the can-trust group.
+
 Some respondents to the survey refused to answer or indicated that they did not know if they thought most people could be trusted and/or if their faith changed as a result of the COVID-19 pandemic; those responses were removed from analysis.
 More respondents said that people can generally be trusted (9526, or 69.4\%) than that people generally cannot be trusted (4209, or 30.6\%). Further, most respondents said their faith has not changed much (12021, or 87.5\%) than said it had changed across both trust groups.
 A greater proportion of respondents who believe most people cannot be trusted said their faith had changed in some way than of those who said people can be trusted. Proportionally more of the participants in the \enquote{cannot trust} group said their faith had decreased than in the \enquote{can trust} group, but not by a great deal (see Table).
-\#\#\#\# COVID-19, family closeness, and national unity
 
-Results of the logistic linear regression show that the dependent categorical variable, beliefs regarding change in national unity post-covid (i.e.~stronger vs.~weaker), is predicted by perceptions of family closeness post-covid while holding differences due to national origin constant (). For every one unit change in perceptions of closeness to family members (i.e.~stronger), the log odds of viewing one's respective nation as \enquote{more united} due to Covid-19 increases by 0.067 compared to viewing one's nation as growing \enquote{less united}.
+\hypertarget{covid-19-family-closeness-and-national-unity}{%
+\subsubsection{COVID-19, family closeness, and national unity}\label{covid-19-family-closeness-and-national-unity}}
+
+Results of the logistic linear regression show that the dependent categorical variable, beliefs regarding change in national unity post-covid (i.e.~stronger vs.~weaker), is predicted by perceptions of family closeness post-covid while holding differences due to national origin constant (see figure 2). For every one unit change in perceptions of closeness to family members (i.e.~stronger), the log odds of viewing one's respective nation as \enquote{more united} due to Covid-19 increases by 0.067 compared to viewing one's nation as growing \enquote{less united}.
 
 \hypertarget{discussion}{%
 \subsection{Discussion}\label{discussion}}
@@ -264,7 +257,7 @@ Results of the logistic linear regression show that the dependent categorical va
 \hypertarget{how-does-the-covid-19-pandemic-relate-to-perceptions-of-changes-in-daily-life}{%
 \subsubsection{How does the COVID-19 Pandemic relate to perceptions of changes in daily life?}\label{how-does-the-covid-19-pandemic-relate-to-perceptions-of-changes-in-daily-life}}
 
-As previously described, an effect of country was found on perception of life changes due to covid. This finding is intuitively obvious, as countries determined their own protocols for managing the COVID-19 pandemic. These protocols varied widely in terms of invasiveness and strictness. As well, COVID-19 prevalence also varied across countries and likely affected these perceptions, although no data are included in this set to explore this. As described above, the countries carrying the highest residuals were South Korea and Denmark. South Korea had a notably high proportion of respondents indicating life changes of \enquote{A great deal}. Conversely, Denmark had the highest indicating no change. This may be due to the strict contact tracing and lockdowns in South Korea, and that the Danes are a very chill people.
+As previously described, an effect of country was found on perception of life changes due to covid (see Figure 5). This finding is intuitively obvious, as countries determined their own protocols for managing the COVID-19 pandemic. These protocols varied widely in terms of invasiveness and strictness. As well, COVID-19 prevalence also varied across countries and likely affected these perceptions, although no data are included in this set to explore this. As described above, the countries carrying the highest residuals were South Korea and Denmark. South Korea had a notably high proportion of respondents indicating life changes of \enquote{A great deal}. Conversely, Denmark had the highest indicating no change. This may be due to the strict contact tracing and lockdowns in South Korea, and that the Danes are a very chill people.
 
 \hypertarget{how-has-covid-19-influenced-beliefs-about-trust-in-others-and-religious-beliefs}{%
 \subsubsection{How has COVID-19 influenced beliefs about trust in others and religious beliefs?}\label{how-has-covid-19-influenced-beliefs-about-trust-in-others-and-religious-beliefs}}
@@ -274,7 +267,7 @@ In general, respondents felt that their life had changed somewhat, but not a gre
 \hypertarget{how-has-covid-19-influenced-beliefs-about-family-closeness-and-national-unity}{%
 \subsubsection{How has COVID-19 influenced beliefs about family closeness and national unity?}\label{how-has-covid-19-influenced-beliefs-about-family-closeness-and-national-unity}}
 
-Results indicate that perceptions of family changes in closeness during the COVID-19 Pandemic is predictive of views regarding changes in national unity during the pandemic. In other words, the closer one believed one's family to grow, the more united the nation also seems to have become throughout the pandemic. While the regression is helpful in understanding global trends, it fails to recognize differences at the country-level. Utilizing Multilevel Modeling would be one solution to this challenge, but these methods were beyond the scope of this project. However, visualizations of differences by the country level help differentiate trends at face value. {[}Graph y\} shows the variation in models by country, where we can see robust variation between nations. {[}table x{]} depicts the country-level differences of perceptions of changes in family closeness as related to perceptions of national unity. Discrepancies between countries are evident, particularly between individualistic countries like the United States compared to more collectivistic cultures such as South Korea {[}table x{]}. This highlights the country-level differences worth exploring -- particularly surrounding what factors contribute to one country's view of national division over another's perspective of unity.
+Results indicate that perceptions of family changes in closeness during the COVID-19 Pandemic is predictive of views regarding changes in national unity during the pandemic. In other words, the closer one believed one's family to grow, the more united the nation also seems to have become throughout the pandemic. While the regression is helpful in understanding global trends, it fails to recognize differences at the country-level. Utilizing Multilevel Modeling would be one solution to this challenge, but these methods were beyond the scope of this project. However, visualizations of differences by the country level help differentiate trends at face value. Figure 3 depicts the country-level differences of perceptions of changes in family closeness as related to perceptions of national unity. Discrepancies between countries are evident, particularly between individualistic countries like the United States compared to more collectivistic cultures such as South Korea (Figure 4). This highlights the country-level differences worth exploring -- particularly surrounding what factors contribute to one country's view of national division over another's perspective of unity.
 
 \hypertarget{future-directions}{%
 \subsubsection{Future directions}\label{future-directions}}
@@ -284,6 +277,16 @@ Further research is recommended to investigate some of the connections we found 
 \newpage
 
 \textbf{REFERENCES}
+
+\begin{tabular}{l|l|l|l}
+\hline
+**Characteristic** & **OR** & **95\% CI** & **p-value**\\
+\hline
+\_\_covid\_family\_\_ & 1.32 & 1.24, 1.40 & \_\_<0.001\_\_\\
+\hline
+\_\_Country\_\_ & 0.93 & 0.92, 0.94 & \_\_<0.001\_\_\\
+\hline
+\end{tabular}
 
 \hypertarget{refs}{}
 \leavevmode\hypertarget{ref-HOLINGUE2020106231}{}%

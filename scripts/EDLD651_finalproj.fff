@@ -16,20 +16,20 @@
 \ifnextchar[{\eatarg}{}
 
 \centering
+\includegraphics{EDLD651_finalproj_files/figure-latex/unnamed-chunk-1-1.pdf}
+\caption{\label{fig:unnamed-chunk-1}Global Beliefs of Unity and Family Closeness}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
 \includegraphics{EDLD651_finalproj_files/figure-latex/unnamed-chunk-2-1.pdf}
-\caption{\label{fig:unnamed-chunk-2}Global Beliefs of Unity and Family Closeness}
+\caption{\label{fig:unnamed-chunk-2}Global Beliefs of Unity and Family Closeness: USA VS. S. Korea}
 \end{figure*}
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
 \centering
 \includegraphics{EDLD651_finalproj_files/figure-latex/unnamed-chunk-3-1.pdf}
-\caption{\label{fig:unnamed-chunk-3}Global Beliefs of Unity and Family Closeness: USA VS. S. Korea}
-\end{figure*}
-\begin{figure*}[hbt]
-\ifnextchar[{\eatarg}{}
-
-\centering
-\includegraphics{EDLD651_finalproj_files/figure-latex/unnamed-chunk-4-1.pdf}
-\caption{\label{fig:unnamed-chunk-4}Perceptions of Changes in Life due to COVID by Country}
+\caption{\label{fig:unnamed-chunk-3}Perceptions of Changes in Life due to COVID by Country}
 \end{figure*}
