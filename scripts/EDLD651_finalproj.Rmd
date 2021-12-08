@@ -29,6 +29,43 @@ classoption       : "man"
 output            : papaja::apa6_pdf
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(tidyverse)
+library(rio)
+library(here)
+library(janitor)
+library(RColorBrewer)
+library(gtsummary)
+library(psych)
+library(naniar)
+library(corrplot)
+library(nnet)
+library(papaja)
+library(car)
+library(kableExtra)
+library(gt)
+
+pew <- haven::read_sav(here("data", "Pew Research Center Global Attitudes Summer 2020 Dataset - Public.sav")) %>% clean_names() %>% as_tibble()
+
+
+
+#Eliott datasetup 
+
+#new df +  showing categories of interest as text
+el_pew <- pew
+el_pew$country <- characterize(el_pew$country)
+el_pew$covid_ownfaith <- characterize(el_pew$covid_ownfaith)
+el_pew$trust_people <- characterize(el_pew$trust_people)
+el_pew$covid_change <- characterize(el_pew$covid_change)
+#View(pew)
+#View(el_pew)
+el_pew$covid_change <- as.factor(el_pew$covid_change)
+el_pew$covid_change <- factor(el_pew$covid_change, c("Not at all", "Not too much", "A fair amount", "A great deal"))
+```
+
 ## Introduction:
 COVID-19 is an on-going international health crisis that continues to disrupt daily life across the globe. Efforts to manage COVID span the gamut of various policies and public health efforts, including mask mandates, social distancing, remote work/schooling, contact tracing, and vaccine development and implementation. The extent to which people have been affected by COVID-19 and subsequent interventions depends not only on the prevalence of infection, but also the substantive interventions to manage it. These, naturally, are related to each other, and subject to various factors, including country, population density, regionally empowered political party, and more. Because of the interplay of factors, there are numerous ways in which COVID-19 could affect perceptions of daily living, relationships (ranging from the level of interpersonal to international), religious beliefs, and so on. Thus, our research questions relate to perceived changes as a result of COVID-19. They are, 
 1.	How does the COVID-19 Pandemic relate to perceptions of changes in daily life?;
@@ -61,6 +98,28 @@ Analyses consisted of descriptives and visualizations of variables broken down b
 Some respondents to the survey refused to answer or indicated that they did not know if they thought most people could be trusted and/or if their faith changed as a result of the COVID-19 pandemic; those responses were removed from analysis. 
 More respondents said that people can generally be trusted (9526, or 69.4%) than that people generally cannot be trusted (4209, or 30.6%). Further, most respondents said their faith has not changed much (12021, or 87.5%) than said it had changed across both trust groups. 
 A greater proportion of respondents who believe most people cannot be trusted said their faith had changed in some way than of those who said people can be trusted. Proportionally more of the participants in the "cannot trust" group said their faith had decreased than in the "can trust" group, but not by a great deal (see Table).
+
+```{r EliottTable, echo=FALSE}
+#displaying trust and faith change
+faith_table <- el_pew %>% 
+  select(covid_ownfaith, trust_people, covid_change) %>% 
+  group_by(trust_people, covid_ownfaith) %>% 
+  filter(trust_people == "In general, most people can be trusted" | trust_people == "In general, most people cannot be trusted",
+         covid_ownfaith == "Has not changed much" | covid_ownfaith == "Stronger" | covid_ownfaith == "Weaker") %>% 
+  summarize(n=n()) %>% 
+  mutate(percent = (n/sum(n))) %>% 
+  select(-n) %>% 
+  pivot_wider(names_from = covid_ownfaith, values_from = percent) %>% 
+  gt() %>% 
+  fmt_percent(columns = c("Has not changed much", "Stronger", "Weaker"), 
+              decimals = 1) %>% 
+  tab_header(
+    title = "Change in Faith during COVID") %>% 
+  tab_options(table.width = 800)
+faith_table
+```
+
+
 In both trust groups, respondents were most likely to say that their life had changed not too much or a fair amount as a result of COVID, rather than either extreme answer of "not at all" or "a great deal." However, answers tended more toward the extreme of "a great deal" in the cannot-trust group than in the can-trust group.
 
 #### COVID-19, family closeness, and national unity
@@ -81,27 +140,7 @@ Further research is recommended to investigate some of the connections we found 
 \newpage
 **REFERENCES**
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 
-library(dplyr)
-library(tidyverse)
-library(rio)
-library(here)
-library(janitor)
-library(RColorBrewer)
-library(gtsummary)
-library(psych)
-library(naniar)
-library(corrplot)
-library(nnet)
-library(papaja)
-library(car)
-library(kableExtra)
-library(gt)
-
-pew <- haven::read_sav(here("data", "Pew Research Center Global Attitudes Summer 2020 Dataset - Public.sav")) %>% clean_names() %>% as_tibble()
-```
 
 
 ```{r DillonChunkCleaning}
@@ -195,7 +234,7 @@ p
 
 
 
-```{r EliottChunkCleaning}
+```{r EliottDuplicates, include = FALSE}
 #new df +  showing categories of interest as text
 el_pew <- pew
 el_pew$country <- characterize(el_pew$country)
@@ -227,7 +266,7 @@ faith_table <- el_pew %>%
   tab_options(table.width = 800)
 faith_table
 
-#same table with n instead of %
+#same table with n instead of % (NOT USEDING)
 faith_table2 <- el_pew %>% 
   select(covid_ownfaith, trust_people, covid_change) %>% 
   group_by(trust_people, covid_ownfaith) %>% 
@@ -243,8 +282,20 @@ faith_table2 <- el_pew %>%
   tab_options(table.width = 800)
 faith_table2
 
+#displaying faith change with trust in people
+#faith_table_wider <- el_pew %>% 
+#  select(covid_ownfaith, covid_change, trust_people) %>% 
+#  filter(trust_people == "In general, most people can be trusted" | trust_people == "In general, most people cannot be trusted",
+#         covid_ownfaith == "Has not changed much" | covid_ownfaith == "Stronger" | covid_ownfaith == "Weaker") %>% 
+#  pivot_wider(names_from = covid_ownfaith, values_from = covid_change) 
+#  gt() %>% 
+#  tab_header(
+#    title = "Trust and Change in Faith during COVID")
+#faith_table_wider
 
+```
 
+```{r EliottFigure, echo = FALSE}
 #figure
 el_pew %>% 
   filter(trust_people %in% c("In general, most people can be trusted", "In general, most people cannot be trusted")) %>%
@@ -262,17 +313,6 @@ el_pew %>%
        y = "Frequency",
        fill = "COVID Life Change") +
   coord_flip()
-
-#displaying faith change with trust in people
-#faith_table_wider <- el_pew %>% 
-#  select(covid_ownfaith, covid_change, trust_people) %>% 
-#  filter(trust_people == "In general, most people can be trusted" | trust_people == "In general, most people cannot be trusted",
-#         covid_ownfaith == "Has not changed much" | covid_ownfaith == "Stronger" | covid_ownfaith == "Weaker") %>% 
-#  pivot_wider(names_from = covid_ownfaith, values_from = covid_change) 
-#  gt() %>% 
-#  tab_header(
-#    title = "Trust and Change in Faith during COVID")
-#faith_table_wider
 
 ```
 
