@@ -34,6 +34,7 @@ COVID-19 is an on-going international health crisis that continues to disrupt da
 1.	How does the COVID-19 Pandemic relate to perceptions of changes in daily life?;
 2.	How has COVID-19 influenced beliefs about trust in others and religious beliefs?; and, 
 3.	How has COVID-19 influenced beliefs about family closeness and national unity? 
+Past research using this dataset has investigated aspects of some of these questions previously — for example, respondents from the United States claim their faith has been strengthened as a result of the COVID-19 pandemic more han respondents from other countries [@covid_us_faithfamily_2021]. Further, more people say the pandemic has strengthened their family bonds than weakened them [@covid_us_faithfamily_2021]. To our knowledge, change in faith has not been investigated in the context of trust in people, nor has family closeness been investigated in the context of national unity. These questions, as well as questions pertaining to perceptions of life change generally, have important implications for health and wellbeing depending on perceptions and beliefs [@HOLINGUE2020106231]. 
 
 ## Methods:
 ### Participants
@@ -74,8 +75,11 @@ In general, respondents felt that their life had changed somewhat, but not a gre
 
 ###	How has COVID-19 influenced beliefs about family closeness and national unity? 
 
+### Future directions
+Further research is recommended to investigate some of the connections we found between life change during COVID-19 in different countries, change in faith, belief in others' trustworthiness, family bonds, and national unity. Whether life change as a result of the pandemic was perceived to be positive or negative was not asked in the dataset used for these analyses, but could have implications for the results related to physical health [@pirutinsky2021covid] and emotional resilience [@HOLINGUE2020106231].
 
-
+\newpage
+**REFERENCES**
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
