@@ -1,6 +1,6 @@
 ---
 title             : "Global Beliefs in the Covid-19 Pandemic"
-shorttitle        : "PSY 612: Final Project"
+shorttitle        : "EDLD: Final Project"
 author: 
       
   - name          : "Dillon Welindt, Eliott Doyle, and Simone Mendes"
@@ -67,40 +67,6 @@ el_pew$covid_change <- as.factor(el_pew$covid_change)
 el_pew$covid_change <- factor(el_pew$covid_change, c("Not at all", "Not too much", "A fair amount", "A great deal"))
 ```
 
-## Introduction:
-COVID-19 is an on-going international health crisis that continues to disrupt daily life across the globe. Efforts to manage COVID span the gamut of various policies and public health efforts, including mask mandates, social distancing, remote work/schooling, contact tracing, and vaccine development and implementation. The extent to which people have been affected by COVID-19 and subsequent interventions depends not only on the prevalence of infection, but also the substantive interventions to manage it. These, naturally, are related to each other, and subject to various factors, including country, population density, regionally empowered political party, and more. Because of the interplay of factors, there are numerous ways in which COVID-19 could affect perceptions of daily living, relationships (ranging from the level of interpersonal to international), religious beliefs, and so on. Thus, our research questions relate to perceived changes as a result of COVID-19. They are, 
-1.	How does the COVID-19 Pandemic relate to perceptions of changes in daily life?;
-2.	How has COVID-19 influenced beliefs about trust in others and religious beliefs?; and, 
-3.	How has COVID-19 influenced beliefs about family closeness and national unity? 
-Past research using this dataset has investigated aspects of some of these questions previously — for example, respondents from the United States claim their faith has been strengthened as a result of the COVID-19 pandemic more han respondents from other countries [@covid_us_faithfamily_2021]. Further, more people say the pandemic has strengthened their family bonds than weakened them [@covid_us_faithfamily_2021]. To our knowledge, change in faith has not been investigated in the context of trust in people, nor has family closeness been investigated in the context of national unity. These questions, as well as questions pertaining to perceptions of life change generally, have important implications for health and wellbeing depending on perceptions and beliefs [@HOLINGUE2020106231]. 
-
-## Methods:
-### Participants
-These data were collected by Pew Research Center as part of their “Global Attitudes & Trends” Summer 2020 Questionnaire. FOurteen countries were included in the survey process. The recruitment procedure varied by country but generally employed a list-assisted Random Digit Dial (RDD) of both landlines and cell phones, stratified by region. Approximately 1000 responses per country were collected for a total N = 14,276. Participants were age 18 or older, and were not compensated for their data.A table of demographic data can be found in Table 1. 
-
-### Measures
-This questionnaire consisted of 40 items. Each item is a standalone question and is not a component of a validated measure. The number of items read to a respondent depended based on their home country and response to prior questions.Items of interest for this study included questions related to life change as a result of covid, changes in trust and personal religious faith, and beliefs about national unity and family closeness: 
-- As a result of the coronavirus1 outbreak, has your own life changed a great deal, a fair amount, not too much, or not at all?
-- Now thinking about our economic situation, how would you describe the current economic situation in (survey country) – is it very good, somewhat good, somewhat bad or very bad?
-- In general, would you describe your political views as ... ? Very conservative, conservative, moderate, liberal, very liberal
-- As a result of the coronavirus outbreak, has your own faith become stronger, weaker, or not changed much?
-- Which of the following statements comes to closer to your view? In general, most people can be trusted, OR In general, most people cannot be trusted
-- As a result of the coronavirus outbreak, has your relationship with immediate family members become stronger, weaker, or not changed much?
-- Thinking about [SURVEY COUNTRY] as a whole, do you think this country is now more UNITED or more DIVIDED than before the coronavirus outbreak?
-
-### Analyses
-Analyses consisted of descriptives and visualizations of variables broken down by country. Furthermore, logistic multivariate linear regressions were run to predict the likelihood of particular beliefs based on independent variables. 
-
-## Results
-
-### COVID-19 and perceptions of change in daily life
-
-### COVID-19, trust in others, and religious beliefs
-Some respondents to the survey refused to answer or indicated that they did not know if they thought most people could be trusted and/or if their faith changed as a result of the COVID-19 pandemic; those responses were removed from analysis. 
-More respondents said that people can generally be trusted (9526, or 69.4%) than that people generally cannot be trusted (4209, or 30.6%). Further, most respondents said their faith has not changed much (12021, or 87.5%) than said it had changed across both trust groups. 
-A greater proportion of respondents who believe most people cannot be trusted said their faith had changed in some way than of those who said people can be trusted. Proportionally more of the participants in the "cannot trust" group said their faith had decreased than in the "can trust" group, but not by a great deal (see Table).
-
-fig.cap="Model 4 Test: Independence among the residuals"
 
 ```{r EliottTable, echo=FALSE, fig.cap="Displaying Differences in Trust and Faith Change"}
 #displaying trust and faith change
@@ -125,43 +91,18 @@ faith_table
 
 In both trust groups, respondents were most likely to say that their life had changed not too much or a fair amount as a result of COVID, rather than either extreme answer of "not at all" or "a great deal." However, answers tended more toward the extreme of "a great deal" in the cannot-trust group than in the can-trust group.
 
-#### COVID-19, family closeness, and national unity 
-
-Results of the logistic linear regression show that the dependent categorical variable, beliefs regarding change in national unity post-covid (i.e. stronger vs. weaker), is predicted by perceptions of family closeness post-covid while holding differences due to national origin constant (`r logmod$full_result`). For every one unit change in perceptions of closeness to family members (i.e. stronger), the log odds of viewing one’s respective nation as “more united” due to Covid-19 increases by 0.067 compared to viewing one’s nation as growing “less united”.
-
-
-## Discussion
-
-### How does the COVID-19 Pandemic relate to perceptions of changes in daily life?;
-
-###	How has COVID-19 influenced beliefs about trust in others and religious beliefs?; and, 
-In general, respondents felt that their life had changed somewhat, but not a great deal, as a result of COVID-19. Participants were somewhat more likely to feel that their life had changed a great deal as a result of the pandemic if they believe that most people cannot be trusted, and/or if they felt their faith had changed to be either stronger or weaker as a result of the pandemic. This is not surprising: a noticeable change in faith could be either one of the factors contributing to an overall life change, or it could be the result of overall life change, although the scope of this survey precludes the ability to make any statements about causality or direction of faith and life change. Further, it is possible that some of the people who do not believe most people can be trusted believe that as a result of behaviors they are witnessing during the pandemic, which might account for some change in life as well — although, again, we cannot make claims beyond speculation about the connection between these two response patterns. 
-
-###	How has COVID-19 influenced beliefs about family closeness and national unity? 
-
-Results indicate that perceptions of family changes in closeness during the COVID-19 Pandemic is predictive of views regarding changes in national unity during the pandemic. In other words, the closer one believed one’s family to grow, the more united the nation also seems to have become throughout the pandemic. While the regression is helpful in understanding global trends, it fails to recognize differences at the country-level. Utilizing Multilevel Modeling would be one solution to this challenge, but these methods were beyond the scope of this project. However, visualizations of differences by the country level help differentiate trends at face value. [Graph y} shows the variation in models by country, where we can see robust variation between nations. [table x] depicts the country-level differences of perceptions of changes in family closeness as related to perceptions of national unity. Discrepancies between countries are evident, particularly between individualistic countries like the United States compared to more collectivistic cultures such as South Korea [table x]. This highlights the country-level differences worth exploring – particularly surrounding what factors contribute to one country’s view of national division over another’s perspective of unity. 
-
-### Future directions
-Further research is recommended to investigate some of the connections we found between life change during COVID-19 in different countries, change in faith, belief in others' trustworthiness, family bonds, and national unity. Whether life change as a result of the pandemic was perceived to be positive or negative was not asked in the dataset used for these analyses, but could have implications for the results related to physical health [@pirutinsky2021covid] and emotional resilience [@HOLINGUE2020106231].
-
-\newpage
-**REFERENCES**
-
-
-
-
 ```{r DillonChunkCleaning, include=FALSE}
 DillonPew <- pew
 DillonPew$country <- characterize(DillonPew$country)
 DillonPew <- DillonPew %>% filter(covid_change<5)
-DillonPew <- DillonPew %>% replace_with_na_all(~.x>4)
+#DillonPew <- DillonPew %>% replace_with_na_all(~.x>4)
 ```
 
 
 ```{r DillonAnalysis, include=FALSE}
 CovidChangeTable <- DillonPew %>% group_by(country, covid_change) %>% summarize(n=n()) %>% mutate(freq=n/sum(n))
 
-ggplot(CovidChangeTable, aes(x = country, y = as.numeric(freq) ,fill=as.factor(covid_change))) +
+covid_change<-ggplot(CovidChangeTable, aes(x = country, y = as.numeric(freq) ,fill=as.factor(covid_change))) +
   geom_bar(stat="identity")+
   coord_flip()+
   labs(title = "'How Has Covid Changed Your Life?' by Country",
@@ -169,6 +110,7 @@ ggplot(CovidChangeTable, aes(x = country, y = as.numeric(freq) ,fill=as.factor(c
   scale_fill_discrete(name = "Response", labels = c("A great deal", "A fair amount", "Not too much","Not at all"))
 
 CovidChangeMeansTable <- DillonPew %>% select(country, covid_change) %>% pivot_wider(names_from = country, values_from = covid_change, values_fn = mean) %>% pivot_longer(cols=everything())
+
 
 ggplot(DillonPew, aes(x = country, y = as.numeric(covid_change) ,fill=as.factor(country))) +
   geom_boxplot()+
@@ -183,6 +125,8 @@ CovidLonger <- CovidLonger %>% pivot_wider(id_cols = c("cregion_us","qs8","one")
                 values_fn = list("one" = length))
 CovidLonger <- CovidLonger %>% pivot_longer(cols=everything())
 
+
+
 DillonCorMatrix <- cor(select(DillonPew, covid_change:covid_who) %>% select(-fav_nato, -covid_us))
 parallel <- DillonCorMatrix %>% fa.parallel(., fm = 'minres', fa = 'fa', n.obs=14261)
 fa.none <- fa(r=DillonCorMatrix, 
@@ -193,52 +137,14 @@ fa.none <- fa(r=DillonCorMatrix,
  max.iter=100, # (50 is the default, but we have changed it to 100
  rotate="varimax") # none rotation
 print(fa.none)
-KMO(r=DillonCorMatrix)
+KMO<-KMO(r=DillonCorMatrix)
 cor(select(DillonPew, covid_change:covid_who))
-corrplot(DillonCorMatrix)
-```
+corrplot<-corrplot(DillonCorMatrix)
 
-```{r DillonMLM, include=FALSE}
-rcr_0 <- lmer(covid_family ~ covid_united + (1 + covid_united | country),
-              data = DillonPew)
-summary(rcr_0)
-
-
-ggplot(data = DillonPew, aes(x = timeonmath, y = covid_fami, 
-                           color = schooltype, group = schoolid)) + 
-  geom_point() + 
-  geom_smooth(method = "lm", se = FALSE) + 
-  theme_minimal()
-
-
-DillonPew <- DillonPew %>% mutate(covid_family = dplyr::recode(covid_family,
-                '1' = 1, 
-                '2' = 3,
-                '3' = 2))
-
-DillonPew <- DillonPew %>% filter(covid_united<3) %>%  mutate(covid_unitedInt=as.integer(covid_united))
-
-DillonPew <- DillonPew %>% filter(covid_family<4) %>% mutate(covid_familyInt=as.integer(covid_family))
-
-ggplot(DillonPew, aes(x = covid_familyInt, y = covid_unitedInt-1))+
-  geom_point()+
-  stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial), aes(color = factor(country)))+
-  labs()
+ChiSqChangeTable <- table(DillonPew$country,DillonPew$covid_change)
+ChiSqChange <- chisq.test(DillonPew$country,DillonPew$covid_change)
 
 ```
-
-
-```{r, include=FALSE}
-logModel1 <- multinom(d_political_scale_us~covid_change+econ_sit,
-                   data = filter(DillonPew, d_political_scale_us<5 & econ_sit<5), family = "binomial")
-summary(logModel1)
-coef(logModel1) %>% exp()
-
-z <- summary(logModel1)$coefficients/summary(logModel1)$standard.errors
-p <- (1 - pnorm(abs(z), 0, 1)) * 2
-p
-```
-
 
 
 ```{r EliottDuplicates, include = FALSE}
@@ -337,7 +243,7 @@ sm_pew <- pew %>%
 ```
 
 
-```{r SimoneRegressions}
+```{r SimoneRegressionsprep, include=FALSE}
 
 sm_pewlog<- sm_pew %>%
  select(covid_united, covid_family, country) %>%
@@ -386,7 +292,7 @@ log_plot
 ```
 
 
-```{r SimoneChunkCleaning, include=FALSE}
+```{r SimoneChunkCleaning2, include=FALSE}
 sm_pew$country <- characterize(sm_pew$country)
 sm_pew$sex <- characterize(sm_pew$sex)
 sm_pew$covid_united <- characterize(sm_pew$covid_united)
@@ -441,7 +347,7 @@ sm_pew %>%
 
 #Figure for global level of feelings of closeness to family due to COVID for those who feel country is more divided or united 
 
-sm_pew %>%
+division_facet<-sm_pew %>%
    select(country, sex, covid_united, covid_family)%>%
   drop_na(covid_united, covid_family) %>%
   ggplot(aes(x = fct_reorder(country, covid_family), fill=as.factor(covid_family))) +
@@ -478,7 +384,7 @@ sm_pew %>%
 
 #Comparing USA and S Korea perceptions of Unity/division and family closeness due to covid (i.e. individualistic vs. more collectivistic)
 
-sm_pew %>%
+division_korea<-sm_pew %>%
    select(country, covid_united, covid_family) %>%
   filter(country == "South Korea" | country == "United States") %>%
   drop_na(covid_united, covid_family) %>%
@@ -495,9 +401,95 @@ sm_pew %>%
   theme(strip.text.x = element_text(size = 15, colour = "lightskyblue4")) +
   theme(strip.background =element_rect(fill="white"))
 
+division_korea
+
 
 ```
 
+```{r, echo=FALSE, warning=FALSE, fig.cap="Predictions of National Unity by Family Closeness"}
+log_table
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.cap="Global Beliefs of Unity and Family Closeness"}
+
+division_facet
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.cap="Global Beliefs of Unity and Family Closeness: USA VS. S. Korea"}
+
+division_korea
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.cap="Perceptions of Changes in Life due to COVID by Country" }
+
+covid_change
+```
+
+## Abstract
+
+The Pew Research Center conducted an international survey on attitudes related to the COVID-19 pandemic in 2020 (N = 14 276). Responses on nationality, as well as perceptions on life change resulting from the pandemic, change in religious faith, change in family unity, national unity, and trust in others were analyzed. The majority of respondents perceived some but not much change in the variables of interest, although there were some differences by country, and responses to changes in particular facets of life showed some correspondence to overall perception of life change. Further, more participants reported stronger faith and family unity than weaker. These results potentially have implications on resilience and well-being.
+
+## Introduction:
+COVID-19 is an on-going international health crisis that continues to disrupt daily life across the globe. Efforts to manage COVID span the gamut of various policies and public health efforts, including mask mandates, social distancing, remote work/schooling, contact tracing, and vaccine development and implementation. The extent to which people have been affected by COVID-19 and subsequent interventions depends not only on the prevalence of infection, but also the substantive interventions to manage it. These, naturally, are related to each other, and subject to various factors, including country, population density, regionally empowered political party, and more. Because of the interplay of factors, there are numerous ways in which COVID-19 could affect perceptions of daily living, relationships (ranging from the level of interpersonal to international), religious beliefs, and so on. Thus, our research questions relate to perceived changes as a result of COVID-19. They are, 
+1.	How does the COVID-19 Pandemic relate to perceptions of changes in daily life?;
+2.	How has COVID-19 influenced beliefs about trust in others and religious beliefs?; and, 
+3.	How has COVID-19 influenced beliefs about family closeness and national unity? 
+Past research using this dataset has investigated aspects of some of these questions previously — for example, respondents from the United States claim their faith has been strengthened as a result of the COVID-19 pandemic more han respondents from other countries [@covid_us_faithfamily_2021]. Further, more people say the pandemic has strengthened their family bonds than weakened them [@covid_us_faithfamily_2021]. To our knowledge, change in faith has not been investigated in the context of trust in people, nor has family closeness been investigated in the context of national unity. These questions, as well as questions pertaining to perceptions of life change generally, have important implications for health and wellbeing depending on perceptions and beliefs [@HOLINGUE2020106231]. 
+
+## Methods:
+### Participants
+These data were collected by Pew Research Center as part of their “Global Attitudes & Trends” Summer 2020 Questionnaire. FOurteen countries were included in the survey process. The recruitment procedure varied by country but generally employed a list-assisted Random Digit Dial (RDD) of both landlines and cell phones, stratified by region. Approximately 1000 responses per country were collected for a total N = 14,276. Participants were age 18 or older, and were not compensated for their data.A table of demographic data can be found in Table 1. 
+
+### Measures
+This questionnaire consisted of 40 items. Each item is a standalone question and is not a component of a validated measure. The number of items read to a respondent depended based on their home country and response to prior questions.Items of interest for this study included questions related to life change as a result of covid, changes in trust and personal religious faith, and beliefs about national unity and family closeness: 
+- As a result of the coronavirus1 outbreak, has your own life changed a great deal, a fair amount, not too much, or not at all?
+- Now thinking about our economic situation, how would you describe the current economic situation in (survey country) – is it very good, somewhat good, somewhat bad or very bad?
+- In general, would you describe your political views as ... ? Very conservative, conservative, moderate, liberal, very liberal
+- As a result of the coronavirus outbreak, has your own faith become stronger, weaker, or not changed much?
+- Which of the following statements comes to closer to your view? In general, most people can be trusted, OR In general, most people cannot be trusted
+- As a result of the coronavirus outbreak, has your relationship with immediate family members become stronger, weaker, or not changed much?
+- Thinking about [SURVEY COUNTRY] as a whole, do you think this country is now more UNITED or more DIVIDED than before the coronavirus outbreak?
+
+### Analyses
+Analyses consisted of descriptives and visualizations of variables broken down by country. Furthermore, logistic multivariate linear regressions were run to predict the likelihood of particular beliefs based on independent variables. 
+
+## Results
+
+### COVID-19 and perceptions of change in daily life
+
+Perceptions of changes due to COVID by country were explored. A chi-square analysis was run of proportion of responses to the item "How has COVID changed your life?" The analysis was significant (chi square = 1710[39], p<2.2e-16). The countries carrying the highest residuals were South Korea and Denmark. These results indicate differences in perception of changes due to COVID by country. Visual inspection of the plot of response proportion by country appears to corroborate this finding.
+
+An exploratory factor analysis was conducted to elucidate the factor structure of this survey. The items included were the first 19 attitudinal items. Additional items were added but caused the function to not converge. This was likely due to the tetrachoric correlative nature of these added data in conjunction with the high degree of missingness. This analysis was conducted in order to generate an empirically valid composite score (factor score for extracted factor of interest), which would be later run as a predictor for variables of interest. Unfortunately, these data do not appear amenable to such analysis (KMO=`r KMO$MSA`, 1 extracted factor with eigenvalue >1). Thus, a factor analytic solution was not pursued further.
+
+### COVID-19, trust in others, and religious beliefs
+Some respondents to the survey refused to answer or indicated that they did not know if they thought most people could be trusted and/or if their faith changed as a result of the COVID-19 pandemic; those responses were removed from analysis. 
+More respondents said that people can generally be trusted (9526, or 69.4%) than that people generally cannot be trusted (4209, or 30.6%). Further, most respondents said their faith has not changed much (12021, or 87.5%) than said it had changed across both trust groups. 
+A greater proportion of respondents who believe most people cannot be trusted said their faith had changed in some way than of those who said people can be trusted. Proportionally more of the participants in the "cannot trust" group said their faith had decreased than in the "can trust" group, but not by a great deal (see Table).
+
+### COVID-19, family closeness, and national unity 
+
+Results of the logistic linear regression show that the dependent categorical variable, beliefs regarding change in national unity post-covid (i.e. stronger vs. weaker), is predicted by perceptions of family closeness post-covid while holding differences due to national origin constant (`r logmod$full_result`). For every one unit change in perceptions of closeness to family members (i.e. stronger), the log odds of viewing one’s respective nation as “more united” due to Covid-19 increases by 0.067 compared to viewing one’s nation as growing “less united”.
+
+
+## Discussion
+
+### How does the COVID-19 Pandemic relate to perceptions of changes in daily life?
+
+As previously described, an effect of country was found on perception of life changes due to covid. This finding is intuitively obvious, as countries determined their own protocols for managing the COVID-19 pandemic. These protocols varied widely in terms of invasiveness and strictness. As well, COVID-19 prevalence also varied across countries and likely affected these perceptions, although no data are included in this set to explore this. As described above, the countries carrying the highest residuals were South Korea and Denmark. South Korea had a notably high proportion of respondents indicating life changes of "A great deal". Conversely, Denmark had the highest indicating no change. This may be due to the strict contact tracing and lockdowns in South Korea, and that the Danes are a very chill people.
+
+###	How has COVID-19 influenced beliefs about trust in others and religious beliefs?
+
+In general, respondents felt that their life had changed somewhat, but not a great deal, as a result of COVID-19. Participants were somewhat more likely to feel that their life had changed a great deal as a result of the pandemic if they believe that most people cannot be trusted, and/or if they felt their faith had changed to be either stronger or weaker as a result of the pandemic. This is not surprising: a noticeable change in faith could be either one of the factors contributing to an overall life change, or it could be the result of overall life change, although the scope of this survey precludes the ability to make any statements about causality or direction of faith and life change. Further, it is possible that some of the people who do not believe most people can be trusted believe that as a result of behaviors they are witnessing during the pandemic, which might account for some change in life as well — although, again, we cannot make claims beyond speculation about the connection between these two response patterns. 
+
+###	How has COVID-19 influenced beliefs about family closeness and national unity? 
+
+Results indicate that perceptions of family changes in closeness during the COVID-19 Pandemic is predictive of views regarding changes in national unity during the pandemic. In other words, the closer one believed one’s family to grow, the more united the nation also seems to have become throughout the pandemic. While the regression is helpful in understanding global trends, it fails to recognize differences at the country-level. Utilizing Multilevel Modeling would be one solution to this challenge, but these methods were beyond the scope of this project. However, visualizations of differences by the country level help differentiate trends at face value. [Graph y} shows the variation in models by country, where we can see robust variation between nations. [table x] depicts the country-level differences of perceptions of changes in family closeness as related to perceptions of national unity. Discrepancies between countries are evident, particularly between individualistic countries like the United States compared to more collectivistic cultures such as South Korea [table x]. This highlights the country-level differences worth exploring – particularly surrounding what factors contribute to one country’s view of national division over another’s perspective of unity. 
+
+### Future directions
+Further research is recommended to investigate some of the connections we found between life change during COVID-19 in different countries, change in faith, belief in others' trustworthiness, family bonds, and national unity. Whether life change as a result of the pandemic was perceived to be positive or negative was not asked in the dataset used for these analyses, but could have implications for the results related to physical health [@pirutinsky2021covid] and emotional resilience [@HOLINGUE2020106231].
+
+\newpage
+**REFERENCES**
 
 
 
