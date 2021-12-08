@@ -47,6 +47,7 @@ library(papaja)
 library(car)
 library(kableExtra)
 library(gt)
+library(haven)
 
 pew <- haven::read_sav(here("data", "Pew Research Center Global Attitudes Summer 2020 Dataset - Public.sav")) %>% clean_names() %>% as_tibble()
 
@@ -88,7 +89,7 @@ This questionnaire consisted of 40 items. Each item is a standalone question and
 - Thinking about [SURVEY COUNTRY] as a whole, do you think this country is now more UNITED or more DIVIDED than before the coronavirus outbreak?
 
 ### Analyses
-Analyses consisted of descriptives and visualizations of variables broken down by country. Furthermore, logistical multivariate linear regressions were run to predict the likelihood of particular beliefs based on independent variables. 
+Analyses consisted of descriptives and visualizations of variables broken down by country. Furthermore, logistic multivariate linear regressions were run to predict the likelihood of particular beliefs based on independent variables. 
 
 ## Results
 
@@ -99,7 +100,9 @@ Some respondents to the survey refused to answer or indicated that they did not 
 More respondents said that people can generally be trusted (9526, or 69.4%) than that people generally cannot be trusted (4209, or 30.6%). Further, most respondents said their faith has not changed much (12021, or 87.5%) than said it had changed across both trust groups. 
 A greater proportion of respondents who believe most people cannot be trusted said their faith had changed in some way than of those who said people can be trusted. Proportionally more of the participants in the "cannot trust" group said their faith had decreased than in the "can trust" group, but not by a great deal (see Table).
 
-```{r EliottTable, echo=FALSE}
+fig.cap="Model 4 Test: Independence among the residuals"
+
+```{r EliottTable, echo=FALSE, fig.cap="Displaying Differences in Trust and Faith Change"}
 #displaying trust and faith change
 faith_table <- el_pew %>% 
   select(covid_ownfaith, trust_people, covid_change) %>% 
@@ -122,7 +125,9 @@ faith_table
 
 In both trust groups, respondents were most likely to say that their life had changed not too much or a fair amount as a result of COVID, rather than either extreme answer of "not at all" or "a great deal." However, answers tended more toward the extreme of "a great deal" in the cannot-trust group than in the can-trust group.
 
-#### COVID-19, family closeness, and national unity
+#### COVID-19, family closeness, and national unity 
+
+Results of the logistic linear regression show that the dependent categorical variable, beliefs regarding change in national unity post-covid (i.e. stronger vs. weaker), is predicted by perceptions of family closeness post-covid while holding differences due to national origin constant (`r logmod$full_result`). For every one unit change in perceptions of closeness to family members (i.e. stronger), the log odds of viewing one’s respective nation as “more united” due to Covid-19 increases by 0.067 compared to viewing one’s nation as growing “less united”.
 
 
 ## Discussion
@@ -134,6 +139,8 @@ In general, respondents felt that their life had changed somewhat, but not a gre
 
 ###	How has COVID-19 influenced beliefs about family closeness and national unity? 
 
+Results indicate that perceptions of family changes in closeness during the COVID-19 Pandemic is predictive of views regarding changes in national unity during the pandemic. In other words, the closer one believed one’s family to grow, the more united the nation also seems to have become throughout the pandemic. While the regression is helpful in understanding global trends, it fails to recognize differences at the country-level. Utilizing Multilevel Modeling would be one solution to this challenge, but these methods were beyond the scope of this project. However, visualizations of differences by the country level help differentiate trends at face value. [Graph y} shows the variation in models by country, where we can see robust variation between nations. [table x] depicts the country-level differences of perceptions of changes in family closeness as related to perceptions of national unity. Discrepancies between countries are evident, particularly between individualistic countries like the United States compared to more collectivistic cultures such as South Korea [table x]. This highlights the country-level differences worth exploring – particularly surrounding what factors contribute to one country’s view of national division over another’s perspective of unity. 
+
 ### Future directions
 Further research is recommended to investigate some of the connections we found between life change during COVID-19 in different countries, change in faith, belief in others' trustworthiness, family bonds, and national unity. Whether life change as a result of the pandemic was perceived to be positive or negative was not asked in the dataset used for these analyses, but could have implications for the results related to physical health [@pirutinsky2021covid] and emotional resilience [@HOLINGUE2020106231].
 
@@ -143,7 +150,7 @@ Further research is recommended to investigate some of the connections we found 
 
 
 
-```{r DillonChunkCleaning}
+```{r DillonChunkCleaning, include=FALSE}
 DillonPew <- pew
 DillonPew$country <- characterize(DillonPew$country)
 DillonPew <- DillonPew %>% filter(covid_change<5)
@@ -151,7 +158,7 @@ DillonPew <- DillonPew %>% replace_with_na_all(~.x>4)
 ```
 
 
-```{r DillonAnalysis}
+```{r DillonAnalysis, include=FALSE}
 CovidChangeTable <- DillonPew %>% group_by(country, covid_change) %>% summarize(n=n()) %>% mutate(freq=n/sum(n))
 
 ggplot(CovidChangeTable, aes(x = country, y = as.numeric(freq) ,fill=as.factor(covid_change))) +
@@ -191,7 +198,7 @@ cor(select(DillonPew, covid_change:covid_who))
 corrplot(DillonCorMatrix)
 ```
 
-```{r DillonMLM}
+```{r DillonMLM, include=FALSE}
 rcr_0 <- lmer(covid_family ~ covid_united + (1 + covid_united | country),
               data = DillonPew)
 summary(rcr_0)
@@ -221,7 +228,7 @@ ggplot(DillonPew, aes(x = covid_familyInt, y = covid_unitedInt-1))+
 ```
 
 
-```{r}
+```{r, include=FALSE}
 logModel1 <- multinom(d_political_scale_us~covid_change+econ_sit,
                    data = filter(DillonPew, d_political_scale_us<5 & econ_sit<5), family = "binomial")
 summary(logModel1)
@@ -295,7 +302,7 @@ faith_table2
 
 ```
 
-```{r EliottFigure, echo = FALSE}
+```{r EliottFigure, echo = FALSE, fig.cap="Figure 1: Trust in People and Changes in Faith due to COVID"}
 #figure
 el_pew %>% 
   filter(trust_people %in% c("In general, most people can be trusted", "In general, most people cannot be trusted")) %>%
@@ -317,8 +324,7 @@ el_pew %>%
 ```
 
 
-```{r SimoneChunkCleaning}
-characterize(pew)
+```{r SimoneChunkCleaning, include=FALSE}
 
 #Setting up data and characterizing
 sm_pew <- pew %>%
@@ -326,21 +332,44 @@ sm_pew <- pew %>%
          covid_united = na_if(covid_united, 9),
          covid_family = na_if(covid_family, 7),
          covid_family = na_if(covid_family, 8),
-         covid_family = na_if(covid_family, 9),
-          covid_family = dplyr::recode(covid_family,
-                '1' = 1, 
-                '2' = 3,
-                '3' = 2),
-         covid_united = dplyr::recode(covid_united,
-                                      '1' = 2,
-                                      '2' = 1))
+         covid_family = na_if(covid_family, 9))
+
 ```
 
 
 ```{r SimoneRegressions}
+as.factor(sm_pew$covid_united)
+
+
+sm_pewlog<- sm_pew %>%
+ select(covid_united, covid_family, country) %>%
+  zap_labels()
+
+
+
+      mutate(covid_family = dplyr::recode(factor(covid_family,
+                '2' = 1, 
+                '3' = 2,
+                '1' = 3)),
+               covid_united = dplyr::recode(factor(covid_united,
+                                      '1' = 2,
+                                      '2' = 1)))
+sm_pewlog<- sm_pew %>%
+ select(covid_united, covid_family, country) %>%
+  zap_labels() %>%
+      mutate(covid_family = case_when(
+                covid_family == 2 ~ 1,
+                covid_family == 3 ~ 2,
+                covid_family == 1 ~ 3,
+                TRUE ~ covid_family),
+             covid_united = case_when(
+               covid_united == '1' ~ 2,
+               covid_united == '2' ~ 1,
+               TRUE ~ covid_united))
+
 
 logmod <- glm(covid_united-1 ~ covid_family + country, binomial(link="logit"),
-                   data = sm_pew)
+                   data = sm_pewlog)
 summary(logmod)
 
 log_table<-logmod %>% #putting our regression results in a table
@@ -352,7 +381,13 @@ log_table<-logmod %>% #putting our regression results in a table
   bold_labels() %>%
   italicize_levels()
 
-log_plot<- ggplot(sm_pew, aes(x = covid_family, y = covid_united-1)) +
+log_table
+```
+
+
+```{r SimoneRegressions, echo = FALSE, fig.cap="Regression Plot: Predicting Perceptions of National Unity by Change in Family Closeness during COVID"}
+
+log_plot<- ggplot(sm_pewlog, aes(x = covid_family, y = covid_united-1)) +
   stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial), aes(color = factor(country))) +
   labs(title = "Predicting Perceptions of National Unity by Beliefs of Family Closeness",
        subtitle = "Changes due to the Covid-19 Pandemic", 
@@ -362,10 +397,11 @@ log_plot<- ggplot(sm_pew, aes(x = covid_family, y = covid_united-1)) +
     scale_color_discrete("Country", labels = c("Australia", "Belgium", "Canada", "Denmark", "France", "Germany", "Italy", "Japan", "Netherlands", "South Korea", "Spain", "Sweden", "United Kingdom", "United States")) +
   theme_minimal()
 
+log_plot
 ```
 
 
-```{r SimoneChunkCleaning}
+```{r SimoneChunkCleaning, include=FALSE}
 sm_pew$country <- characterize(sm_pew$country)
 sm_pew$sex <- characterize(sm_pew$sex)
 sm_pew$covid_united <- characterize(sm_pew$covid_united)
