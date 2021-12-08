@@ -1,0 +1,15 @@
+\begin{longtable}{rrr}
+\caption*{
+{\large Change in Faith during COVID}
+} \\
+\toprule
+Has not changed much & Stronger & Weaker \\
+\midrule
+\multicolumn{1}{l}{In general, most people can be trusted} \\
+\midrule
+$89.8\%$ & $8.2\%$ & $2.0\%$ \\
+\midrule
+\multicolumn{1}{l}{In general, most people cannot be trusted} \\
+$82.3\%$ & $12.7\%$ & $5.0\%$ \\
+ \bottomrule
+\end{longtable}
