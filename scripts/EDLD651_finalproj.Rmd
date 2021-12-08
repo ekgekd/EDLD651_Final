@@ -36,21 +36,42 @@ COVID-19 is an on-going international health crisis that continues to disrupt da
 3.	How has COVID-19 influenced beliefs about family closeness and national unity? 
 
 ## Methods:
-Participants
+### Participants
 These data were collected by Pew Research Center as part of their “Global Attitudes & Trends” Summer 2020 Questionnaire. FOurteen countries were included in the survey process. The recruitment procedure varied by country but generally employed a list-assisted Random Digit Dial (RDD) of both landlines and cell phones, stratified by region. Approximately 1000 responses per country were collected for a total N = 14,276. Participants were age 18 or older, and were not compensated for their data.A table of demographic data can be found in Table 1. 
 
-Measures
-This questionnaire consisted of 40 items. Each item is a standalone question and is not a component of a validated measure. The number of items read to a respondent depended based on their home country and response to prior questions.Items of interest for this study included questions related to life change as a result of covid, changes in trust and personal religious faith, and beliefs about national unity and family closeness. 
+### Measures
+This questionnaire consisted of 40 items. Each item is a standalone question and is not a component of a validated measure. The number of items read to a respondent depended based on their home country and response to prior questions.Items of interest for this study included questions related to life change as a result of covid, changes in trust and personal religious faith, and beliefs about national unity and family closeness: 
+- As a result of the coronavirus1 outbreak, has your own life changed a great deal, a fair amount, not too much, or not at all?
+- Now thinking about our economic situation, how would you describe the current economic situation in (survey country) – is it very good, somewhat good, somewhat bad or very bad?
+- In general, would you describe your political views as ... ? Very conservative, conservative, moderate, liberal, very liberal
+- As a result of the coronavirus outbreak, has your own faith become stronger, weaker, or not changed much?
+- Which of the following statements comes to closer to your view? In general, most people can be trusted, OR In general, most people cannot be trusted
+- As a result of the coronavirus outbreak, has your relationship with immediate family members become stronger, weaker, or not changed much?
+- Thinking about [SURVEY COUNTRY] as a whole, do you think this country is now more UNITED or more DIVIDED than before the coronavirus outbreak?
 
-Analyses
+### Analyses
 Analyses consisted of descriptives and visualizations of variables broken down by country. Furthermore, logistical multivariate linear regressions were run to predict the likelihood of particular beliefs based on independent variables. 
 
 ## Results
 
+### COVID-19 and perceptions of change in daily life
+
+### COVID-19, trust in others, and religious beliefs
+Some respondents to the survey refused to answer or indicated that they did not know if they thought most people could be trusted and/or if their faith changed as a result of the COVID-19 pandemic; those responses were removed from analysis. 
+More respondents said that people can generally be trusted (9526, or 69.4%) than that people generally cannot be trusted (4209, or 30.6%). Further, most respondents said their faith has not changed much (12021, or 87.5%) than said it had changed across both trust groups. 
+A greater proportion of respondents who believe most people cannot be trusted said their faith had changed in some way than of those who said people can be trusted. Proportionally more of the participants in the "cannot trust" group said their faith had decreased than in the "can trust" group, but not by a great deal (see Table).
+In both trust groups, respondents were most likely to say that their life had changed not too much or a fair amount as a result of COVID, rather than either extreme answer of "not at all" or "a great deal." However, answers tended more toward the extreme of "a great deal" in the cannot-trust group than in the can-trust group.
+
+#### COVID-19, family closeness, and national unity
+
+
 ## Discussion
 
 ### How does the COVID-19 Pandemic relate to perceptions of changes in daily life?;
+
 ###	How has COVID-19 influenced beliefs about trust in others and religious beliefs?; and, 
+In general, respondents felt that their life had changed somewhat, but not a great deal, as a result of COVID-19. Participants were somewhat more likely to feel that their life had changed a great deal as a result of the pandemic if they believe that most people cannot be trusted, and/or if they felt their faith had changed to be either stronger or weaker as a result of the pandemic. This is not surprising: a noticeable change in faith could be either one of the factors contributing to an overall life change, or it could be the result of overall life change, although the scope of this survey precludes the ability to make any statements about causality or direction of faith and life change. Further, it is possible that some of the people who do not believe most people can be trusted believe that as a result of behaviors they are witnessing during the pandemic, which might account for some change in life as well — although, again, we cannot make claims beyond speculation about the connection between these two response patterns. 
+
 ###	How has COVID-19 influenced beliefs about family closeness and national unity? 
 
 
@@ -414,34 +435,9 @@ sm_pew %>%
 
 
 
-Instrument
-This questionnaire included 40 items. The number of items read to a respondent depended based on their country and response to prior questions. 
-The items addressed in these report are: 
-- As a result of the coronavirus1 outbreak, has your own life changed a great deal, a fair amount, not too much, or not at all?
-- Now thinking about our economic situation, how would you describe the current economic situation in (survey country) – is it very good, somewhat good, somewhat bad or very bad?
-- In general, would you describe your political views as ... ? Very conservative, conservative, moderate, liberal, very liberal
-- As a result of the coronavirus outbreak, has your own faith become stronger, weaker, or not changed much?
-- Which of the following statements comes to closer to your view? In general, most people can be trusted, OR In general, most people cannot be trusted
-- As a result of the coronavirus outbreak, has your relationship with immediate family members become stronger, weaker, or not changed much?
-- Thinking about [SURVEY COUNTRY] as a whole, do you think this country is now more UNITED or more DIVIDED than before the coronavirus outbreak?
-
-Results:
-
-COVID-19 and perceptions of change in daily life
-
-COVID-19, trust in others, and religious beliefs
-Some respondents to the survey refused to answer or indicated that they did not know if they thought most people could be trusted and/or if their faith changed as a result of the COVID-19 pandemic; those responses were removed from analysis. 
-More respondents said that people can generally be trusted (9526, or 69.4%) than that people generally cannot be trusted (4209, or 30.6%). Further, most respondents said their faith has not changed much (12021, or 87.5%) than said it had changed across both trust groups. 
-A greater proportion of respondents who believe most people cannot be trusted said their faith had changed in some way than of those who said people can be trusted. Proportionally more of the participants in the "cannot trust" group said their faith had decreased than in the "can trust" group, but not by a great deal (see Table).
-In both trust groups, respondents were most likely to say that their life had changed not too much or a fair amount as a result of COVID, rather than either extreme answer of "not at all" or "a great deal." However, answers tended more toward the extreme of "a great deal" in the cannot-trust group than in the can-trust group.
-
-COVID-19, family closeness, and national unity
-
-Discussion:
 
 
 
-In general, respondents felt that their life had changed somewhat, but not a great deal, as a result of COVID-19. Participants were somewhat more likely to feel that their life had changed a great deal as a result of the pandemic if they believe that most people cannot be trusted, and/or if they felt their faith had changed to be either stronger or weaker as a result of the pandemic. This is not surprising: a noticeable change in faith could be either one of the factors contributing to an overall life change, or it could be the result of overall life change, although the scope of this survey precludes the ability to make any statements about causality or direction of faith and life change. Further, it is possible that some of the people who do not believe most people can be trusted believe that as a result of behaviors they are witnessing during the pandemic, which might account for some change in life as well — although, again, we cannot make claims beyond speculation about the connection between these two response patterns. 
 
 
 
