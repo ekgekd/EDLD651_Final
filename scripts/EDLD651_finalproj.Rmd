@@ -1,11 +1,60 @@
 ---
-title: "EDLD651 Final Project"
-author: "Dillon, Eliott, Simone"
-date: "11/18/2021"
-output: html_document
-editor_options: 
-  chunk_output_type: console
+title             : "Global Beliefs in the Covid-19 Pandemic"
+shorttitle        : "PSY 612: Final Project"
+author: 
+      
+  - name          : "Dillon Welindt, Eliott Doyle, and Simone Mendes"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    email         : "smendes@uoregon.edu"
+affiliation:
+  - id            : "1"
+    institution   : "University of Oregon"
+      
+keywords          : "COVID-19, national unity, family closeness, trust, life change"
+wordcount         : "X"
+
+bibliography      : ["r-references.bib"]
+
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : yes
+mask              : no
+draft             : no
+
+documentclass     : "apa6"
+classoption       : "man"
+output            : papaja::apa6_pdf
 ---
+
+## Introduction:
+COVID-19 is an on-going international health crisis that continues to disrupt daily life across the globe. Efforts to manage COVID span the gamut of various policies and public health efforts, including mask mandates, social distancing, remote work/schooling, contact tracing, and vaccine development and implementation. The extent to which people have been affected by COVID-19 and subsequent interventions depends not only on the prevalence of infection, but also the substantive interventions to manage it. These, naturally, are related to each other, and subject to various factors, including country, population density, regionally empowered political party, and more. Because of the interplay of factors, there are numerous ways in which COVID-19 could affect perceptions of daily living, relationships (ranging from the level of interpersonal to international), religious beliefs, and so on. Thus, our research questions relate to perceived changes as a result of COVID-19. They are, 
+1.	How does the COVID-19 Pandemic relate to perceptions of changes in daily life?;
+2.	How has COVID-19 influenced beliefs about trust in others and religious beliefs?; and, 
+3.	How has COVID-19 influenced beliefs about family closeness and national unity? 
+
+## Methods:
+Participants
+These data were collected by Pew Research Center as part of their “Global Attitudes & Trends” Summer 2020 Questionnaire. FOurteen countries were included in the survey process. The recruitment procedure varied by country but generally employed a list-assisted Random Digit Dial (RDD) of both landlines and cell phones, stratified by region. Approximately 1000 responses per country were collected for a total N = 14,276. Participants were age 18 or older, and were not compensated for their data.A table of demographic data can be found in Table 1. 
+
+Measures
+This questionnaire consisted of 40 items. Each item is a standalone question and is not a component of a validated measure. The number of items read to a respondent depended based on their home country and response to prior questions.Items of interest for this study included questions related to life change as a result of covid, changes in trust and personal religious faith, and beliefs about national unity and family closeness. 
+
+Analyses
+Analyses consisted of descriptives and visualizations of variables broken down by country. Furthermore, logistical multivariate linear regressions were run to predict the likelihood of particular beliefs based on independent variables. 
+
+## Results
+
+## Discussion
+
+### How does the COVID-19 Pandemic relate to perceptions of changes in daily life?;
+###	How has COVID-19 influenced beliefs about trust in others and religious beliefs?; and, 
+###	How has COVID-19 influenced beliefs about family closeness and national unity? 
+
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -21,6 +70,8 @@ library(psych)
 library(naniar)
 library(corrplot)
 library(nnet)
+library(papaja)
+library(car)
 library(kableExtra)
 library(gt)
 
@@ -75,6 +126,36 @@ KMO(r=DillonCorMatrix)
 cor(select(DillonPew, covid_change:covid_who))
 corrplot(DillonCorMatrix)
 ```
+
+```{r DillonMLM}
+rcr_0 <- lmer(covid_family ~ covid_united + (1 + covid_united | country),
+              data = DillonPew)
+summary(rcr_0)
+
+
+ggplot(data = DillonPew, aes(x = timeonmath, y = covid_fami, 
+                           color = schooltype, group = schoolid)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) + 
+  theme_minimal()
+
+
+DillonPew <- DillonPew %>% mutate(covid_family = dplyr::recode(covid_family,
+                '1' = 1, 
+                '2' = 3,
+                '3' = 2))
+
+DillonPew <- DillonPew %>% filter(covid_united<3) %>%  mutate(covid_unitedInt=as.integer(covid_united))
+
+DillonPew <- DillonPew %>% filter(covid_family<4) %>% mutate(covid_familyInt=as.integer(covid_family))
+
+ggplot(DillonPew, aes(x = covid_familyInt, y = covid_unitedInt-1))+
+  geom_point()+
+  stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial), aes(color = factor(country)))+
+  labs()
+
+```
+
 
 ```{r}
 logModel1 <- multinom(d_political_scale_us~covid_change+econ_sit,
@@ -172,7 +253,6 @@ el_pew %>%
 
 
 ```{r SimoneChunkCleaning}
-
 characterize(pew)
 
 #Setting up data and characterizing
@@ -181,12 +261,51 @@ sm_pew <- pew %>%
          covid_united = na_if(covid_united, 9),
          covid_family = na_if(covid_family, 7),
          covid_family = na_if(covid_family, 8),
-         covid_family = na_if(covid_family, 9))
+         covid_family = na_if(covid_family, 9),
+          covid_family = dplyr::recode(covid_family,
+                '1' = 1, 
+                '2' = 3,
+                '3' = 2),
+         covid_united = dplyr::recode(covid_united,
+                                      '1' = 2,
+                                      '2' = 1))
+```
 
+
+```{r SimoneRegressions}
+
+logmod <- glm(covid_united-1 ~ covid_family + country, binomial(link="logit"),
+                   data = sm_pew)
+summary(logmod)
+
+log_table<-logmod %>% #putting our regression results in a table
+  tbl_regression(
+    exponentiate = TRUE, 
+    pvalue_fun = ~style_pvalue(.x, digits = 2),
+  ) %>%
+  bold_p(t = 0.10) %>%
+  bold_labels() %>%
+  italicize_levels()
+
+log_plot<- ggplot(sm_pew, aes(x = covid_family, y = covid_united-1)) +
+  stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial), aes(color = factor(country))) +
+  labs(title = "Predicting Perceptions of National Unity by Beliefs of Family Closeness",
+       subtitle = "Changes due to the Covid-19 Pandemic", 
+       x = "Change in Family Closeness (from weaker to stronger)",
+       y = " Perceptions of National Unity (From weaker to stronger)",
+       color = "Country") + 
+    scale_color_discrete("Country", labels = c("Australia", "Belgium", "Canada", "Denmark", "France", "Germany", "Italy", "Japan", "Netherlands", "South Korea", "Spain", "Sweden", "United Kingdom", "United States")) +
+  theme_minimal()
+
+```
+
+
+```{r SimoneChunkCleaning}
 sm_pew$country <- characterize(sm_pew$country)
 sm_pew$sex <- characterize(sm_pew$sex)
 sm_pew$covid_united <- characterize(sm_pew$covid_united)
-sm_pew$covid_family <- characterize(sm_pew$covid_family) 
+sm_pew$covid_family <- characterize(sm_pew$covid_family)
+ 
 
 #Summary table of national unity percentages
 
@@ -203,6 +322,7 @@ sm_pew %>%
     by = covid_family)
 
 # Figure for descriptive of changes in family closeness per country
+
 
 sm_pew %>%
   select(country, covid_family)%>%
@@ -292,15 +412,7 @@ sm_pew %>%
 
 ```
 
-Introduction:
-COVID-19 is an international health crisis that has been managed through various policies, including mask mandates, social distancing, remote work/schooling, etc., which have often disrupted people’s normal routines. The extent to which people have been affected by COVID-19 and subsequent interventions depends not only on the prevalence of infection, but also the substantive interventions to manage it. These, naturally, are related to each other, and subject to various factors, including country, population density, regionally empowered political party, and more. Because of the interplay of factors, there are numerous ways in which COVID-19 could affect perceptions of daily living, relationships (ranging from the level of interpersonal to international), religious beliefs, and so on. Thus, our research questions relate to perceived changes as a result of COVID-19. They are, 
-1.	How does the COVID-19 Pandemic relate to perceptions of changes in daily life?;
-2.	How has COVID-19 influenced beliefs about trust in others and religious beliefs?; and, 
-3.	How has COVID-19 influenced beliefs about family closeness and national unity? 
 
-Methods:
-Participants
-These data were collected by Pew Research Center, as part of their “Global Attitudes & Trends” Summer 2020 Questionnaire. Their recruitment procedure varied by country but generally employed a list-assisted Random Digit Dial (RDD) or both landlines and cell phones, stratified by region. Approximately 1000 responses per country were collected. A table of demographic data can be found in Table 1. Participants were age 18 or older, and were not compensated for their data.
 
 Instrument
 This questionnaire included 40 items. The number of items read to a respondent depended based on their country and response to prior questions. 
