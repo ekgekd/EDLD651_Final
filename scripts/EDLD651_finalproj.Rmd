@@ -10,6 +10,9 @@ author:
 affiliation:
   - id            : "1"
     institution   : "University of Oregon"
+
+abstract: |
+  The Pew Research Center conducted an international survey on attitudes related to the COVID-19 pandemic in 2020 (N = 14 276). Responses on nationality, as well as perceptions on life change resulting from the pandemic, change in religious faith, change in family unity, national unity, and trust in others were analyzed. The majority of respondents perceived some but not much change in the variables of interest, although there were some differences by country, and responses to changes in particular facets of life showed some correspondence to overall perception of life change. Further, more participants reported stronger faith and family unity than weaker. These results potentially have implications on resilience and well-being.      
       
 keywords          : "COVID-19, national unity, family closeness, trust, life change"
 wordcount         : "X"
@@ -49,22 +52,31 @@ library(kableExtra)
 library(gt)
 library(haven)
 
-pew <- haven::read_sav(here("data", "Pew Research Center Global Attitudes Summer 2020 Dataset - Public.sav")) %>% clean_names() %>% as_tibble()
+pew <- haven::read_sav(here("data", "Pew Research Center Global Attitudes Summer 2020 Dataset - Public.sav")) %>%
+  clean_names() %>% 
+  as_tibble()
 
 
 
 #Eliott datasetup 
 
 #new df +  showing categories of interest as text
-el_pew <- pew
-el_pew$country <- characterize(el_pew$country)
-el_pew$covid_ownfaith <- characterize(el_pew$covid_ownfaith)
-el_pew$trust_people <- characterize(el_pew$trust_people)
-el_pew$covid_change <- characterize(el_pew$covid_change)
+el_pew <- pew %>% 
+  # mutate(country = characterize(country),
+  #       covid_ownfaith <- characterize(covid_ownfaith))...
+# OR
+  mutate(across(c(country, covid_ownfaith, trust_people, covid_change), characterize),
+         covid_change = fct_relevel(covid_change,
+                                     "Not at all", "Not too much", "A fair amount", "A great deal")
+         )
+# el_pew$country <- characterize(el_pew$country)
+# el_pew$covid_ownfaith <- characterize(el_pew$covid_ownfaith)
+# el_pew$trust_people <- characterize(el_pew$trust_people)
+# el_pew$covid_change <- characterize(el_pew$covid_change)
 #View(pew)
 #View(el_pew)
-el_pew$covid_change <- as.factor(el_pew$covid_change)
-el_pew$covid_change <- factor(el_pew$covid_change, c("Not at all", "Not too much", "A fair amount", "A great deal"))
+#el_pew$covid_change <- as.factor(el_pew$covid_change)
+#el_pew$covid_change <- factor(el_pew$covid_change, c("Not at all", "Not too much", "A fair amount", "A great deal"))
 ```
 
 
@@ -79,6 +91,7 @@ faith_table <- el_pew %>%
   mutate(percent = (n/sum(n))) %>% 
   select(-n) %>% 
   pivot_wider(names_from = covid_ownfaith, values_from = percent) %>% 
+  ungroup() %>% 
   gt() %>% 
   fmt_percent(columns = c("Has not changed much", "Stronger", "Weaker"), 
               decimals = 1) %>% 
@@ -90,31 +103,45 @@ faith_table
 
 
 ```{r DillonChunkCleaning, include=FALSE}
-DillonPew <- pew
-DillonPew$country <- characterize(DillonPew$country)
-DillonPew <- DillonPew %>% filter(covid_change<5)
+DillonPew <- pew %>% 
+  mutate(country = characterize(country)) %>% 
+  filter(covid_change < 5)
+
+#DillonPew$country <- characterize(DillonPew$country)
+#DillonPew <- DillonPew %>% filter(covid_change<5)
 #DillonPew <- DillonPew %>% replace_with_na_all(~.x>4)
 ```
 
 
 ```{r DillonAnalysis, include=FALSE}
-CovidChangeTable <- DillonPew %>% group_by(country, covid_change) %>% summarize(n=n()) %>% mutate(freq=n/sum(n))
+CovidChangeTable <- DillonPew %>% 
+  group_by(country, covid_change) %>% 
+  summarize(n = n()) %>% 
+  mutate(freq = n/sum(n))
 
-covid_change<-ggplot(CovidChangeTable, aes(x = country, y = as.numeric(freq) ,fill=as.factor(covid_change))) +
+covid_change <- ggplot(CovidChangeTable, aes(x = country, y = as.numeric(freq), fill=as.factor(covid_change))) +
   geom_bar(stat="identity")+
-  coord_flip()+
+  coord_flip() +
   labs(title = "'How Has Covid Changed Your Life?' by Country",
        y= "Frequency", fill="Responses")+
   scale_fill_discrete(name = "Response", labels = c("A great deal", "A fair amount", "Not too much","Not at all"))
 
-CovidChangeMeansTable <- DillonPew %>% select(country, covid_change) %>% pivot_wider(names_from = country, values_from = covid_change, values_fn = mean) %>% pivot_longer(cols=everything())
+CovidChangeMeansTable <- DillonPew %>% 
+  select(country, covid_change) %>% 
+  pivot_wider(
+    names_from = country, 
+    values_from = covid_change, 
+    values_fn = mean) %>% 
+  pivot_longer(cols = everything())
 
 
-ggplot(DillonPew, aes(x = country, y = as.numeric(covid_change) ,fill=as.factor(country))) +
+ggplot(DillonPew, aes(x = country, y = as.numeric(covid_change), fill=as.factor(country))) +
   geom_boxplot()+
   coord_flip()
 
-CovidLonger <- DillonPew %>% select(country, qs8, cregion_us) %>% filter(country=="United States" & !is.na(qs8)) %>% mutate(one = 1)
+CovidLonger <- DillonPew %>% 
+  select(country, qs8, cregion_us) %>% 
+  filter(country=="United States" & !is.na(qs8)) %>% mutate(one = 1)
 CovidLonger$qs8 <- characterize(CovidLonger$qs8)
 CovidLonger$cregion_us <- characterize(CovidLonger$cregion_us) 
 CovidLonger <- CovidLonger %>% pivot_wider(id_cols = c("cregion_us","qs8","one"),
@@ -169,6 +196,7 @@ faith_table <- el_pew %>%
   mutate(percent = (n/sum(n))) %>% 
   select(-n) %>% 
   pivot_wider(names_from = covid_ownfaith, values_from = percent) %>% 
+  ungroup() %>% 
   gt() %>% 
   fmt_percent(columns = c("Has not changed much", "Stronger", "Weaker"), 
               decimals = 1) %>% 
@@ -185,6 +213,7 @@ faith_table2 <- el_pew %>%
          covid_ownfaith == "Has not changed much" | covid_ownfaith == "Stronger" | covid_ownfaith == "Weaker") %>% 
   summarize(n=n()) %>% 
   pivot_wider(names_from = covid_ownfaith, values_from = n) %>% 
+  ungroup() %>% 
   gt() %>% 
  # fmt_percent(columns = c("Has not changed much", "Stronger", "Weaker"), 
  #             decimals = 1) %>% 
@@ -243,7 +272,7 @@ sm_pew <- pew %>%
 
 ```{r SimoneRegressionsprep, warning = FALSE, include=FALSE}
 
-sm_pewlog<- sm_pew %>%
+sm_pewlog <- sm_pew %>%
  select(covid_united, covid_family, country) %>%
   zap_labels() %>%
       mutate(covid_family = case_when(
@@ -261,7 +290,7 @@ logmod <- glm(covid_united-1 ~ covid_family + country, binomial(link="logit"),
                    data = sm_pewlog)
 summary(logmod)
 
-log_table<-logmod %>% #putting our regression results in a table
+log_table <- logmod %>% #putting our regression results in a table
   tbl_regression(
     exponentiate = TRUE, 
     pvalue_fun = ~style_pvalue(.x, digits = 2),
@@ -419,23 +448,25 @@ division_korea
 covid_change
 ```
 
-## Abstract
+# Introduction
+COVID-19 is an on-going international health crisis that continues to disrupt daily life across the globe. Efforts to manage COVID span the gamut of various policies and public health efforts, including mask mandates, social distancing, remote work/schooling, contact tracing, and vaccine development and implementation. The extent to which people have been affected by COVID-19 and subsequent interventions depends not only on the prevalence of infection, but also the substantive interventions to manage it. These, naturally, are related to each other, and subject to various factors, including country, population density, regionally empowered political party, and more. Because of the interplay of factors, there are numerous ways in which COVID-19 could affect perceptions of daily living, relationships (ranging from the level of interpersonal to international), religious beliefs, and so on. Thus, our research questions relate to perceived changes as a result of COVID-19. They are:
 
-The Pew Research Center conducted an international survey on attitudes related to the COVID-19 pandemic in 2020 (N = 14 276). Responses on nationality, as well as perceptions on life change resulting from the pandemic, change in religious faith, change in family unity, national unity, and trust in others were analyzed. The majority of respondents perceived some but not much change in the variables of interest, although there were some differences by country, and responses to changes in particular facets of life showed some correspondence to overall perception of life change. Further, more participants reported stronger faith and family unity than weaker. These results potentially have implications on resilience and well-being.
+1.	How does the COVID-19 pandemic relate to perceptions of changes in daily life?
 
-## Introduction:
-COVID-19 is an on-going international health crisis that continues to disrupt daily life across the globe. Efforts to manage COVID span the gamut of various policies and public health efforts, including mask mandates, social distancing, remote work/schooling, contact tracing, and vaccine development and implementation. The extent to which people have been affected by COVID-19 and subsequent interventions depends not only on the prevalence of infection, but also the substantive interventions to manage it. These, naturally, are related to each other, and subject to various factors, including country, population density, regionally empowered political party, and more. Because of the interplay of factors, there are numerous ways in which COVID-19 could affect perceptions of daily living, relationships (ranging from the level of interpersonal to international), religious beliefs, and so on. Thus, our research questions relate to perceived changes as a result of COVID-19. They are, 
-1.	How does the COVID-19 Pandemic relate to perceptions of changes in daily life?;
-2.	How has COVID-19 influenced beliefs about trust in others and religious beliefs?; and, 
+2.	How has COVID-19 influenced beliefs about trust in others and religious beliefs? 
+
 3.	How has COVID-19 influenced beliefs about family closeness and national unity? 
-Past research using this dataset has investigated aspects of some of these questions previously — for example, respondents from the United States claim their faith has been strengthened as a result of the COVID-19 pandemic more han respondents from other countries [@covid_us_faithfamily_2021]. Further, more people say the pandemic has strengthened their family bonds than weakened them [@covid_us_faithfamily_2021]. To our knowledge, change in faith has not been investigated in the context of trust in people, nor has family closeness been investigated in the context of national unity. These questions, as well as questions pertaining to perceptions of life change generally, have important implications for health and wellbeing depending on perceptions and beliefs [@HOLINGUE2020106231]. 
 
-## Methods:
-### Participants
-These data were collected by Pew Research Center as part of their “Global Attitudes & Trends” Summer 2020 Questionnaire. FOurteen countries were included in the survey process. The recruitment procedure varied by country but generally employed a list-assisted Random Digit Dial (RDD) of both landlines and cell phones, stratified by region. Approximately 1000 responses per country were collected for a total N = 14,276. Participants were age 18 or older, and were not compensated for their data.A table of demographic data can be found in Table 1. 
+Past research using this dataset has investigated aspects of some of these questions — for example, respondents from the United States claim their faith has been strengthened as a result of the COVID-19 pandemic more than respondents from other countries [@covid_us_faithfamily_2021]. Further, more people say the pandemic has strengthened their family bonds than weakened them [@covid_us_faithfamily_2021]. To our knowledge, change in faith has not been investigated in the context of trust in people, nor has family closeness been investigated in the context of national unity. These questions, as well as questions pertaining to perceptions of life change generally, have important implications for health and well-being depending on perceptions and beliefs [@HOLINGUE2020106231]. 
 
-### Measures
-This questionnaire consisted of 40 items. Each item is a standalone question and is not a component of a validated measure. The number of items read to a respondent depended based on their home country and response to prior questions.Items of interest for this study included questions related to life change as a result of covid, changes in trust and personal religious faith, and beliefs about national unity and family closeness: 
+# Methods
+
+## Participants
+These data were collected by Pew Research Center as part of their “Global Attitudes & Trends” Summer 2020 Questionnaire. Fourteen countries were included in the survey process. The recruitment procedure varied by country but generally employed a list-assisted Random Digit Dial (RDD) of both landlines and cell phones, stratified by region. Approximately 1000 responses per country were collected for a total *N* = `r format(nrow(pew), big.mark = ",")`. Participants were age 18 or older, and were not compensated for their data.A table of demographic data can be found in Table 1. 
+
+# Measures
+This questionnaire consisted of 40 items. Each item is a standalone question and is not a component of a validated measure. The number of items read to a respondent depended based on their home country and response to prior questions. Items of interest for this study included questions related to life change as a result of covid, changes in trust and personal religious faith, and beliefs about national unity and family closeness: 
+
 - As a result of the coronavirus1 outbreak, has your own life changed a great deal, a fair amount, not too much, or not at all?
 - Now thinking about our economic situation, how would you describe the current economic situation in (survey country) – is it very good, somewhat good, somewhat bad or very bad?
 - In general, would you describe your political views as ... ? Very conservative, conservative, moderate, liberal, very liberal
@@ -444,18 +475,18 @@ This questionnaire consisted of 40 items. Each item is a standalone question and
 - As a result of the coronavirus outbreak, has your relationship with immediate family members become stronger, weaker, or not changed much?
 - Thinking about [SURVEY COUNTRY] as a whole, do you think this country is now more UNITED or more DIVIDED than before the coronavirus outbreak?
 
-### Analyses
+## Analyses
 Analyses consisted of descriptives and visualizations of variables broken down by country. Furthermore, logistic multivariate linear regressions were run to predict the likelihood of particular beliefs based on independent variables. 
 
-## Results
+# Results
 
-### COVID-19 and perceptions of change in daily life
+## COVID-19 and perceptions of change in daily life
 
-Perceptions of changes due to COVID by country were explored. A chi-square analysis was run of proportion of responses to the item "How has COVID changed your life?" The analysis was significant (chi square = 1710[39], p<2.2e-16). The countries carrying the highest residuals were South Korea and Denmark. These results indicate differences in perception of changes due to COVID by country. Visual inspection of the plot of response proportion by country appears to corroborate this finding.
+Perceptions of changes due to COVID by country were explored. A chi-square analysis was run of proportion of responses to the item "How has COVID changed your life?" The analysis was significant ($\chi^2$ = `r round(unname(ChiSqChange$statistic))`[`r unname(ChiSqChange$parameter)`], *p* < .001). The countries carrying the highest residuals were South Korea and Denmark. These results indicate differences in perception of changes due to COVID by country. Visual inspection of the plot of response proportion by country appears to corroborate this finding.
 
-An exploratory factor analysis was conducted to elucidate the factor structure of this survey. The items included were the first 19 attitudinal items. Additional items were added but caused the function to not converge. This was likely due to the tetrachoric correlative nature of these added data in conjunction with the high degree of missingness. This analysis was conducted in order to generate an empirically valid composite score (factor score for extracted factor of interest), which would be later run as a predictor for variables of interest. Unfortunately, these data do not appear amenable to such analysis (KMO=`r KMO$MSA`, 1 extracted factor with eigenvalue >1). Thus, a factor analytic solution was not pursued further.
+An exploratory factor analysis was conducted to elucidate the factor structure of this survey. The items included were the first 19 attitudinal items. Additional items were added but caused the function to not converge. This was likely due to the tetrachoric correlative nature of these added data in conjunction with the high degree of missingness. This analysis was conducted in order to generate an empirically valid composite score (factor score for extracted factor of interest), which would be later run as a predictor for variables of interest. Unfortunately, these data do not appear amenable to such analysis (KMO = `r round(KMO$MSA, 2)`, 1 extracted factor with eigenvalue > 1). Thus, a factor analytic solution was not pursued further.
 
-### COVID-19, trust in others, and religious beliefs
+## COVID-19, trust in others, and religious beliefs
 
 In both trust groups, respondents were most likely to say that their life had changed not too much or a fair amount as a result of COVID, rather than either extreme answer of "not at all" or "a great deal." However, answers tended more toward the extreme of "a great deal" in the cannot-trust group than in the can-trust group.
 
